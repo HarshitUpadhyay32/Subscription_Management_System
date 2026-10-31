@@ -58,6 +58,9 @@ const MainApp: React.FC = () => {
   useEffect(() => {
     if (window.location.hash.includes('access_token') || window.location.search.includes('code=')) {
       setRootView('dashboard');
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
     }
   }, []);
 

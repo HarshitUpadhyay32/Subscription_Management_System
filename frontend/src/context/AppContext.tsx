@@ -184,6 +184,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             email: profile?.email || user.email || '',
             role: (profile?.role as UserRole) || fallbackRole,
             company: userMeta.company,
+            avatar: profile?.avatar_url || userMeta.avatar_url || userMeta.picture,
           });
         })
         .catch(() => {
@@ -193,6 +194,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             email: user.email || '',
             role: fallbackRole,
             company: userMeta.company,
+            avatar: userMeta.avatar_url || userMeta.picture,
           });
         });
     }
