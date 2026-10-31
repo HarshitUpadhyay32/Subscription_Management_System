@@ -43,13 +43,13 @@ export const CustomerPaymentsPage: React.FC = () => {
                   <td className="py-3 px-4 font-mono font-medium text-[#34313A]">
                     {pay.transactionReference}
                   </td>
-                  <td className="py-3 px-4 font-mono text-[#714B67] font-medium">
+                  <td className="py-3 px-4 font-mono text-[#7A4C72] font-medium">
                     {pay.invoiceNumber}
                   </td>
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-1.5 font-medium text-[#34313A]">
                       {pay.paymentMethod === 'UPI' ? (
-                        <Smartphone className="w-3.5 h-3.5 text-[#714B67]" />
+                        <Smartphone className="w-3.5 h-3.5 text-[#7A4C72]" />
                       ) : (
                         <CreditCard className="w-3.5 h-3.5 text-[#3B82F6]" />
                       )}

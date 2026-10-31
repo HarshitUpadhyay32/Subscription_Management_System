@@ -35,7 +35,10 @@ export interface Product {
   plans: Plan[];
   createdAt: string;
   activeSubscriptionsCount: number;
-  status: 'active' | 'archived';
+  status: 'active' | 'archived' | 'inactive';
+  basePrice?: number;
+  costPrice?: number;
+  productType?: string;
 }
 
 export interface Customer {
@@ -52,13 +55,22 @@ export interface Customer {
   status: 'active' | 'inactive';
   avatar: string;
   totalSpent: number;
+  subscriptionsCount?: number;
 }
 
-export type SubscriptionStatus = 'active' | 'pending' | 'expired' | 'cancelled' | 'trial';
+export type SubscriptionStatus =
+  | 'active'
+  | 'pending'
+  | 'expired'
+  | 'cancelled'
+  | 'trial'
+  | 'paused'
+  | 'draft'
+  | 'closed';
 
 export interface Subscription {
   id: string;
-  subscriptionCode: string; // e.g. BL-SUB-1042
+  subscriptionCode: string; // e.g. SUB-001
   customerId: string;
   customerName: string;
   customerCompany: string;
@@ -113,7 +125,7 @@ export interface Quotation {
   convertedSubscriptionId?: string;
 }
 
-export type InvoiceStatus = 'paid' | 'pending' | 'overdue' | 'cancelled';
+export type InvoiceStatus = 'paid' | 'pending' | 'overdue' | 'cancelled' | 'draft';
 
 export interface InvoiceItem {
   description: string;
@@ -124,7 +136,7 @@ export interface InvoiceItem {
 
 export interface Invoice {
   id: string;
-  invoiceNumber: string; // e.g. BL-INV-2026-081
+  invoiceNumber: string; // e.g. INV-001
   subscriptionId?: string;
   customerId: string;
   customerName: string;
@@ -144,18 +156,18 @@ export interface Invoice {
   paymentMethod?: string;
 }
 
-export type PaymentStatus = 'successful' | 'pending' | 'failed' | 'refunded';
+export type PaymentStatus = 'successful' | 'success' | 'pending' | 'failed' | 'refunded';
 
 export interface Payment {
   id: string;
-  transactionReference: string; // e.g. TXN-IND-92841
+  transactionReference: string; // e.g. PAY-001
   invoiceId: string;
   invoiceNumber: string;
   customerId: string;
   customerName: string;
   amount: number;
   paymentDate: string;
-  paymentMethod: 'UPI' | 'Credit Card' | 'Debit Card' | 'Net Banking' | 'Razorpay' | 'NEFT';
+  paymentMethod: string;
   status: PaymentStatus;
   cardLast4?: string;
   upiId?: string;
@@ -165,12 +177,14 @@ export interface DiscountCode {
   id: string;
   code: string;
   description: string;
-  type: 'percentage' | 'fixed';
+  type: 'percentage' | 'fixed' | 'Percentage' | 'Fixed Amount';
   value: number; // e.g. 15 for 15% or 500 for ₹500
   validUntil: string;
+  validityRange?: string;
   isActive: boolean;
   usedCount: number;
   minimumAmount?: number;
+  minOrder?: number;
 }
 
 export interface TaxRule {
@@ -186,10 +200,11 @@ export interface StaffMember {
   id: string;
   name: string;
   email: string;
-  role: 'Super Admin' | 'Billing Operations' | 'Customer Support' | 'Sales Representative';
+  role: string;
   department: string;
   status: 'active' | 'inactive';
   joinedDate: string;
+  lastLogin?: string;
   avatar: string;
   assignedCustomersCount: number;
 }

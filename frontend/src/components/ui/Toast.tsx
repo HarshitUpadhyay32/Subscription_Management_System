@@ -13,13 +13,13 @@ export const ToastContainer: React.FC = () => {
           success: <CheckCircle2 className="w-4 h-4 text-[#28A879] shrink-0" />,
           error: <AlertCircle className="w-4 h-4 text-[#DC6464] shrink-0" />,
           warning: <AlertTriangle className="w-4 h-4 text-[#E6A23C] shrink-0" />,
-          info: <Info className="w-4 h-4 text-[#714B67] shrink-0" />,
+          info: <Info className="w-4 h-4 text-[#7A4C72] shrink-0" />,
         };
         const borderStyles = {
           success: 'border-[#28A879]/20 bg-white',
           error: 'border-[#DC6464]/20 bg-white',
           warning: 'border-[#E6A23C]/20 bg-white',
-          info: 'border-[#714B67]/20 bg-white',
+          info: 'border-[#7A4C72]/20 bg-white',
         };
 
         return (

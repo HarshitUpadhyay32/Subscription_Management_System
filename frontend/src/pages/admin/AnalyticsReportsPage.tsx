@@ -96,11 +96,11 @@ export const AnalyticsReportsPage: React.FC = () => {
             </div>
             <div className="flex items-center gap-3 text-xs">
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-md bg-[#714B67]" />
+                <span className="w-3 h-3 rounded-md bg-[#7A4C72]" />
                 <span className="text-[#696A75]">Recurring MRR</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-md bg-[#EDE5F0]" />
+                <span className="w-3 h-3 rounded-md bg-[#F6EDF3]" />
                 <span className="text-[#696A75]">Total Billed</span>
               </div>
             </div>
@@ -117,17 +117,17 @@ export const AnalyticsReportsPage: React.FC = () => {
                   <div className="w-full max-w-[36px] bg-[#F3F5F8] rounded-xl flex flex-col items-center justify-end overflow-hidden h-36 p-1">
                     <div
                       style={{ height: `${(d.total / 20) * 100}%` }}
-                      className="w-full rounded-t-lg bg-[#EDE5F0] relative"
+                      className="w-full rounded-t-lg bg-[#F6EDF3] relative"
                     >
                       <div
                         style={{ height: `${(d.mrr / d.total) * 100}%` }}
-                        className="w-full rounded-t-lg bg-[#714B67] absolute bottom-0 left-0"
+                        className="w-full rounded-t-lg bg-[#7A4C72] absolute bottom-0 left-0"
                       />
                     </div>
                   </div>
                   <span
                     className={`text-xs font-medium ${
-                      d.current ? 'text-[#714B67] font-bold' : 'text-[#696A75]'
+                      d.current ? 'text-[#7A4C72] font-bold' : 'text-[#696A75]'
                     }`}
                   >
                     {d.month}
@@ -150,11 +150,11 @@ export const AnalyticsReportsPage: React.FC = () => {
                     <span className="font-medium text-[#34313A] truncate max-w-[190px]">
                       {item.name}
                     </span>
-                    <span className="font-mono text-[#714B67] font-semibold">{item.percentage}%</span>
+                    <span className="font-mono text-[#7A4C72] font-semibold">{item.percentage}%</span>
                   </div>
                   <div className="w-full h-2 rounded-full bg-[#F3F5F8] overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-[#714B67]"
+                      className="h-full rounded-full bg-[#7A4C72]"
                       style={{ width: `${item.percentage}%`, opacity: 1 - idx * 0.18 }}
                     />
                   </div>
@@ -231,7 +231,7 @@ export const AnalyticsReportsPage: React.FC = () => {
             </div>
             <div className="flex justify-between items-center text-[#696A75]">
               <span>Quotation-to-Subscription Rate:</span>
-              <span className="font-mono font-semibold text-[#714B67]">82.4%</span>
+              <span className="font-mono font-semibold text-[#7A4C72]">82.4%</span>
             </div>
           </div>
         </div>

@@ -50,7 +50,7 @@ export const CustomerSettingsPage: React.FC = () => {
       <form onSubmit={handleSave} className="space-y-5">
         <div className="bg-white rounded-2xl p-6 border border-[#E9EBEF] shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E9EBEF]">
-            <Building2 className="w-4 h-4 text-[#714B67]" />
+            <Building2 className="w-4 h-4 text-[#7A4C72]" />
             <h2 className="text-sm font-semibold text-[#34313A]">Organization & Contact Profile</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -61,7 +61,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -71,7 +71,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 required
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -83,7 +83,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -93,7 +93,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -105,7 +105,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 required
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -114,7 +114,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 type="text"
                 value={gstin}
                 onChange={(e) => setGstin(e.target.value.toUpperCase())}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -131,7 +131,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 type="checkbox"
                 checked={notifyInvoice}
                 onChange={(e) => setNotifyInvoice(e.target.checked)}
-                className="rounded text-[#714B67] focus:ring-[#714B67]"
+                className="rounded text-[#7A4C72] focus:ring-[#7A4C72]"
               />
               <span className="text-xs text-[#34313A]">
                 Receive instant PDF invoices via email upon recurring renewal
@@ -142,7 +142,7 @@ export const CustomerSettingsPage: React.FC = () => {
                 type="checkbox"
                 checked={notifyRenew}
                 onChange={(e) => setNotifyRenew(e.target.checked)}
-                className="rounded text-[#714B67] focus:ring-[#714B67]"
+                className="rounded text-[#7A4C72] focus:ring-[#7A4C72]"
               />
               <span className="text-xs text-[#34313A]">
                 Send SMS & Email reminder 48 hours prior to UPI autopay execution
@@ -154,7 +154,7 @@ export const CustomerSettingsPage: React.FC = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-2 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
+            className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-2 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
           >
             <Save className="w-4 h-4" />
             <span>Update Account Profile</span>

@@ -55,7 +55,7 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
             onClick={() => setMethod('UPI')}
             className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
               method === 'UPI'
-                ? 'border-[#714B67] bg-[#EDE5F0]/40 text-[#714B67]'
+                ? 'border-[#7A4C72] bg-[#F6EDF3]/40 text-[#7A4C72]'
                 : 'border-[#E9EBEF] hover:bg-[#F3F5F8] text-[#34313A]'
             }`}
           >
@@ -70,7 +70,7 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
             onClick={() => setMethod('Credit Card')}
             className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
               method === 'Credit Card'
-                ? 'border-[#714B67] bg-[#EDE5F0]/40 text-[#714B67]'
+                ? 'border-[#7A4C72] bg-[#F6EDF3]/40 text-[#7A4C72]'
                 : 'border-[#E9EBEF] hover:bg-[#F3F5F8] text-[#34313A]'
             }`}
           >
@@ -95,11 +95,11 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
                 onChange={(e) => setUpiId(e.target.value)}
                 required
                 placeholder="username@bank"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div className="flex items-center gap-2 text-[11px] text-[#92939D]">
-              <QrCode className="w-3.5 h-3.5 text-[#714B67]" />
+              <QrCode className="w-3.5 h-3.5 text-[#7A4C72]" />
               <span>UPI Autopay authorization mandate will trigger on your mobile app</span>
             </div>
           </div>
@@ -112,7 +112,7 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
                 value={cardNumber}
                 onChange={(e) => setCardNumber(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -124,7 +124,7 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
                   onChange={(e) => setExpiry(e.target.value)}
                   placeholder="MM/YY"
                   required
-                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#714B67]"
+                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#7A4C72]"
                 />
               </div>
               <div>
@@ -135,7 +135,7 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
                   value={cvv}
                   onChange={(e) => setCvv(e.target.value)}
                   required
-                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#714B67]"
+                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-[#E9EBEF] bg-white focus:outline-none focus:border-[#7A4C72]"
                 />
               </div>
             </div>
@@ -161,7 +161,7 @@ export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
           <button
             type="submit"
             disabled={isProcessing}
-            className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 transition-colors disabled:opacity-50"
           >
             {isProcessing ? (
               <>

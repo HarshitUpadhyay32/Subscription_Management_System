@@ -35,7 +35,7 @@ export const CustomerSubscriptionsPage: React.FC = () => {
         </div>
         <button
           onClick={() => setIsUpgradeModalOpen(true)}
-          className="px-3.5 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors self-start sm:self-auto"
+          className="px-3.5 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors self-start sm:self-auto"
         >
           <Sparkles className="w-3.5 h-3.5" />
           <span>Explore Upgrade Options</span>
@@ -51,14 +51,14 @@ export const CustomerSubscriptionsPage: React.FC = () => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <span className="font-mono font-medium text-xs text-[#714B67] bg-[#EDE5F0] px-2.5 py-0.5 rounded-md">
+                <span className="font-mono font-medium text-xs text-[#7A4C72] bg-[#F6EDF3] px-2.5 py-0.5 rounded-md">
                   {sub.subscriptionCode}
                 </span>
                 <Badge variant={sub.status}>{sub.status.toUpperCase()}</Badge>
               </div>
               <div>
                 <h2 className="text-lg font-bold text-[#34313A]">{sub.productName}</h2>
-                <div className="text-xs font-medium text-[#714B67] mt-0.5">{sub.planName} Plan</div>
+                <div className="text-xs font-medium text-[#7A4C72] mt-0.5">{sub.planName} Plan</div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2 text-xs text-[#696A75]">
                 <div>
@@ -136,19 +136,19 @@ export const CustomerSubscriptionsPage: React.FC = () => {
             ].map((tier, idx) => (
               <label
                 key={idx}
-                className="flex items-start gap-3 p-3.5 rounded-xl border border-[#E9EBEF] hover:border-[#714B67] hover:bg-[#FDFDFE] cursor-pointer transition-all"
+                className="flex items-start gap-3 p-3.5 rounded-xl border border-[#E9EBEF] hover:border-[#7A4C72] hover:bg-[#FDFDFE] cursor-pointer transition-all"
               >
                 <input
                   type="radio"
                   name="tier"
                   checked={selectedPlanName === tier.name}
                   onChange={() => setSelectedPlanName(tier.name)}
-                  className="mt-1 text-[#714B67] focus:ring-[#714B67]"
+                  className="mt-1 text-[#7A4C72] focus:ring-[#7A4C72]"
                 />
                 <div className="flex-1">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold text-xs text-[#34313A]">{tier.name}</span>
-                    <span className="font-mono text-xs font-bold text-[#714B67]">{tier.price}</span>
+                    <span className="font-mono text-xs font-bold text-[#7A4C72]">{tier.price}</span>
                   </div>
                   <p className="text-[11px] text-[#92939D] mt-0.5">{tier.features}</p>
                 </div>
@@ -165,7 +165,7 @@ export const CustomerSubscriptionsPage: React.FC = () => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white"
+              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white"
             >
               Request Upgrade
             </button>

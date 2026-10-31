@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, User, Building2, ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
@@ -14,170 +14,148 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   onNavigateLogin,
   onSuccessRegister,
 }) => {
-  const { supabaseSignUp } = useApp();
+  const { registerAccount } = useApp();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
-      return;
-    }
-    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
-      setError('Password must include uppercase, lowercase, and a special character.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-      return;
-    }
-
     setIsLoading(true);
+    setError('');
     try {
-      await supabaseSignUp(email, password, name, company || undefined);
-      onSuccessRegister('customer');
+      registerAccount(name, email, company);
+      onSuccessRegister('admin');
     } catch (err: any) {
-      setError(err.message || 'Registration failed. Please try again.');
+      setError(err.message || 'Registration failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F6] flex flex-col justify-center items-center p-4 antialiased text-[#29252A] relative overflow-hidden">
-      <div className="bg-decorative-watermark top-8 left-1/2 -translate-x-1/2 text-[140px] font-serif opacity-15 pointer-events-none select-none">
-        SIGNUP
-      </div>
-      <div className="absolute w-[500px] h-[300px] bg-[#EDE5F0]/60 rounded-full blur-3xl pointer-events-none -z-10" />
-
-      <div className="w-full max-w-md relative z-10">
-        <div className="text-center mb-6">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col lg:flex-row font-sans selection:bg-[#F6EDF3] selection:text-[#7A4C72]">
+      {/* Left side: Form */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 max-w-xl mx-auto lg:mx-0">
+        <div>
           <button
             onClick={onNavigateLanding}
-            className="inline-flex items-center gap-2 mb-2 focus:outline-none"
+            className="flex items-center gap-2 mb-10 text-left focus:outline-none"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#714B67] text-white flex items-center justify-center font-bold text-base shadow-[0_2px_8px_rgba(113,75,103,0.3)]">
-              BL
-            </div>
-            <span className="text-2xl font-bold tracking-tight text-[#29252A] font-serif">
+            <span className="text-2xl font-bold tracking-tight text-gray-900">
               Brightloop
             </span>
           </button>
-          <h1 className="text-2xl font-bold text-[#29252A] font-serif">Create your Customer Account</h1>
-          <p className="text-xs text-[#92939D] mt-1">
-            Public registration enrolls you into the Customer Portal.
-          </p>
-        </div>
 
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E9EBEF] shadow-[0_12px_40px_rgba(52,49,58,0.06)]">
+          <div className="space-y-2 mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
+            <p className="text-sm text-gray-500">
+              Start your 14-day free trial on Brightloop
+            </p>
+          </div>
+
           {error && (
-            <div className="p-3 mb-4 rounded-xl bg-[#FDF2F2] border border-[#F9D6D6] text-xs text-[#DC6464]">
+            <div className="p-3 mb-4 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
               {error}
             </div>
           )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-[#34313A] mb-1">Full Name</label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Rahul Sharma"
-                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                />
-              </div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Full Name</label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Elena Vance"
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7A4C72]/20 focus:border-[#7A4C72] transition-all"
+              />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#34313A] mb-1">Company / Organization</label>
-              <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                <input
-                  type="text"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  placeholder="e.g. Sharma Logistics Solutions"
-                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                />
-              </div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Work Email</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="elena@company.com"
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7A4C72]/20 focus:border-[#7A4C72] transition-all"
+              />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-[#34313A] mb-1">Work Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="rahul@sharmalogistics.in"
-                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                />
-              </div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Company Name</label>
+              <input
+                type="text"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                placeholder="Acme Innovations"
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7A4C72]/20 focus:border-[#7A4C72] transition-all"
+              />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-[#34313A] mb-1">Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                  <input
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-[#34313A] mb-1">Confirm</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                  <input
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                  />
-                </div>
-              </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Password</label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Create password"
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7A4C72]/20 focus:border-[#7A4C72] transition-all"
+              />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] disabled:opacity-60 disabled:cursor-not-allowed text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] flex items-center justify-center gap-1.5 transition-colors"
+              className="w-full py-2.5 px-4 rounded-lg bg-[#7A4C72] hover:bg-[#683B60] text-white text-sm font-semibold transition-all shadow-sm flex items-center justify-center gap-2 mt-2"
             >
-              {isLoading ? (
-                <><Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Creating account…</span></>
-              ) : (
-                <><span>Create Account</span><ArrowRight className="w-3.5 h-3.5" /></>
-              )}
+              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+              <span>Sign Up</span>
             </button>
           </form>
 
-          <div className="mt-6 text-center text-xs text-[#92939D]">
+          <div className="mt-8 text-center text-xs text-gray-500">
             Already have an account?{' '}
-            <button onClick={onNavigateLogin} className="text-[#714B67] font-semibold hover:underline">
-              Sign In
+            <button
+              onClick={onNavigateLogin}
+              className="text-[#7A4C72] font-semibold hover:underline"
+            >
+              Log in
             </button>
           </div>
+        </div>
+
+        <div className="pt-8">
+          <button
+            onClick={onNavigateLanding}
+            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to website</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Right side: Decorative background */}
+      <div className="hidden lg:flex w-1/2 bg-[#F6EDF3]/60 relative overflow-hidden items-center justify-center p-16">
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#EDE4EC] blur-2xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#E5D7E3] blur-2xl" />
+        <div className="relative z-10 max-w-lg space-y-4">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
+            Start Scaling <br />
+            Your Recurring <br />
+            Revenue Today.
+          </h2>
+          <p className="text-base text-gray-600 leading-relaxed max-w-md">
+            Automate invoicing, recurring payments, and subscriber management.
+          </p>
         </div>
       </div>
     </div>

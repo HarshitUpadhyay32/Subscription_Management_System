@@ -37,7 +37,7 @@ export const CustomerInvoicesPage: React.FC = () => {
               onClick={() => setStatusFilter(st)}
               className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-colors ${
                 statusFilter === st
-                  ? 'bg-[#EDE5F0] text-[#714B67] font-semibold'
+                  ? 'bg-[#F6EDF3] text-[#7A4C72] font-semibold'
                   : 'text-[#92939D] hover:text-[#34313A]'
               }`}
             >
@@ -66,7 +66,7 @@ export const CustomerInvoicesPage: React.FC = () => {
             <tbody className="divide-y divide-[#E9EBEF]">
               {myInvoices.map((inv) => (
                 <tr key={inv.id} className="hover:bg-[#FDFDFE] transition-colors">
-                  <td className="py-3 px-4 font-mono font-medium text-[#714B67]">
+                  <td className="py-3 px-4 font-mono font-medium text-[#7A4C72]">
                     {inv.invoiceNumber}
                   </td>
                   <td className="py-3 px-4 font-medium text-[#34313A] max-w-xs truncate">
@@ -95,7 +95,7 @@ export const CustomerInvoicesPage: React.FC = () => {
                       {(inv.status === 'pending' || inv.status === 'overdue') && (
                         <button
                           onClick={() => setPayingInvoice(inv)}
-                          className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1 transition-colors shadow-xs"
+                          className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1 transition-colors shadow-xs"
                         >
                           <CreditCard className="w-3 h-3" />
                           <span>Pay Now</span>

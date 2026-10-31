@@ -125,7 +125,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
         </div>
         <button
           onClick={openCreateModal}
-          className="px-3.5 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors self-start sm:self-auto"
+          className="px-3.5 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors self-start sm:self-auto"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>New Quotation</span>
@@ -140,7 +140,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
             onClick={() => setStatusFilter(st)}
             className={`px-3 py-1.5 rounded-xl text-xs font-medium capitalize transition-colors whitespace-nowrap ${
               statusFilter === st
-                ? 'bg-[#EDE5F0] text-[#714B67] font-semibold'
+                ? 'bg-[#F6EDF3] text-[#7A4C72] font-semibold'
                 : 'bg-white border border-[#E9EBEF] text-[#696A75] hover:bg-[#F3F5F8]'
             }`}
           >
@@ -170,7 +170,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
             <tbody className="divide-y divide-[#E9EBEF]">
               {filteredQuotes.map((q) => (
                 <tr key={q.id} className="hover:bg-[#FDFDFE] transition-colors">
-                  <td className="py-3 px-4 font-mono font-medium text-[#714B67]">
+                  <td className="py-3 px-4 font-mono font-medium text-[#7A4C72]">
                     {q.quotationNumber}
                   </td>
                   <td className="py-3 px-4">
@@ -223,7 +223,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
                       {(q.status === 'approved' || q.status === 'sent') && (
                         <button
                           onClick={() => convertQuotationToSubscription(q.id)}
-                          className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1 shadow-xs"
+                          className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1 shadow-xs"
                           title="Activate as live subscription"
                         >
                           <ArrowRightCircle className="w-3 h-3" />
@@ -264,7 +264,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
               value={customerId}
               onChange={(e) => setCustomerId(e.target.value)}
               required
-              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
             >
               {customers.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -284,7 +284,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
                   if (prod && prod.plans[0]) setSelectedPlanId(prod.plans[0].id);
                 }}
                 required
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               >
                 {products.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -299,7 +299,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
                 value={selectedPlanId}
                 onChange={(e) => setSelectedPlanId(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               >
                 {currentProduct.plans.map((pl) => (
                   <option key={pl.id} value={pl.id}>
@@ -316,7 +316,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 required
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -331,7 +331,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
                 max={100}
                 value={discountPercent}
                 onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -339,7 +339,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
               <select
                 value={taxPercent}
                 onChange={(e) => setTaxPercent(Number(e.target.value))}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               >
                 <option value={18}>18% (Standard GST)</option>
                 <option value={12}>12% (Concessional)</option>
@@ -353,7 +353,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
             />
           </div>
           <div className="flex justify-end gap-2 pt-3 border-t border-[#E9EBEF]">
@@ -366,7 +366,7 @@ export const QuotationsPage: React.FC<{ searchQuery?: string }> = ({ searchQuery
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white"
+              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white"
             >
               Save Quotation Draft
             </button>

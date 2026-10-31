@@ -20,14 +20,14 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
 
   return (
     <div className="min-h-screen bg-[#F3F5F8] flex flex-col justify-center items-center p-4 antialiased text-[#34313A]">
-      <div className="absolute w-[500px] h-[300px] bg-[#EDE5F0]/60 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute w-[500px] h-[300px] bg-[#F6EDF3]/60 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <button
             onClick={onNavigateLanding}
             className="inline-flex items-center gap-2 mb-2 focus:outline-none"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#714B67] text-white flex items-center justify-center font-bold text-base shadow-[0_2px_8px_rgba(113,75,103,0.3)]">
+            <div className="w-9 h-9 rounded-xl bg-[#7A4C72] text-white flex items-center justify-center font-bold text-base shadow-[0_2px_8px_rgba(113,75,103,0.3)]">
               BL
             </div>
             <span className="text-xl font-bold tracking-tight text-[#34313A] font-heading">
@@ -52,7 +52,7 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
               </p>
               <button
                 onClick={onNavigateLogin}
-                className="w-full mt-4 py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white transition-colors"
+                className="w-full mt-4 py-2.5 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white transition-colors"
               >
                 Return to Login
               </button>
@@ -69,13 +69,13 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                    className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
                   />
                 </div>
               </div>
               <button
                 type="submit"
-                className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
+                className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
               >
                 Send Recovery Instructions
               </button>

@@ -21,27 +21,30 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F3F5F8] flex flex-col md:flex-row antialiased text-[#34313A]">
-      {/* Sidebar */}
-      <Sidebar
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col antialiased text-gray-800 font-sans">
+      {/* Full-width sticky Top Bar spanning edge-to-edge */}
+      <TopNavbar
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        searchQuery={searchQuery}
+        onSearchChange={onSearchChange}
+        onNavigateLanding={() => onNavigate('landing')}
         currentPath={currentPath}
         onNavigate={onNavigate}
-        isOpenMobile={isMobileMenuOpen}
-        onCloseMobile={() => setIsMobileMenuOpen(false)}
       />
-      {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <TopNavbar
-          onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          searchQuery={searchQuery}
-          onSearchChange={onSearchChange}
-          onNavigateLanding={() => onNavigate('landing')}
+
+      {/* Main split view: Sidebar + Page Content */}
+      <div className="flex-1 flex flex-row min-h-[calc(100vh-56px)]">
+        <Sidebar
           currentPath={currentPath}
+          onNavigate={onNavigate}
+          isOpenMobile={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
-        <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-[1600px] w-full mx-auto">
+        <main className="flex-1 p-5 sm:p-6 lg:p-8 min-w-0 max-w-[1600px] mx-auto w-full overflow-y-auto">
           {children}
         </main>
       </div>
+
       <ToastContainer />
     </div>
   );

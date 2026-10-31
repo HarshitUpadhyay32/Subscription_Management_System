@@ -13,6 +13,11 @@ export type BadgeVariant =
   | 'approved'
   | 'converted'
   | 'successful'
+  | 'success'
+  | 'failed'
+  | 'paused'
+  | 'closed'
+  | 'inactive'
   | 'purple'
   | 'neutral';
 
@@ -20,43 +25,49 @@ interface BadgeProps {
   variant: BadgeVariant | string;
   children: React.ReactNode;
   size?: 'sm' | 'md';
+  className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ variant, children, size = 'sm' }) => {
+export const Badge: React.FC<BadgeProps> = ({ variant, children, size = 'sm', className = '' }) => {
   const getStyles = (v: string) => {
     switch (v.toLowerCase()) {
       case 'active':
       case 'paid':
       case 'successful':
+      case 'success':
       case 'approved':
-        return 'bg-[#EBF7F2] text-[#28A879] border-[#D4EFE4]';
+        return 'bg-[#EAF8F0] text-[#1E834D]';
       case 'pending':
       case 'trial':
       case 'sent':
-        return 'bg-[#FEF7EC] text-[#D9822B] border-[#FBEAD2]';
+      case 'paused':
+        return 'bg-[#FEF5E7] text-[#D97706]';
       case 'expired':
       case 'cancelled':
       case 'overdue':
       case 'failed':
-        return 'bg-[#FDF2F2] text-[#DC6464] border-[#F9D6D6]';
+      case 'inactive':
+        return 'bg-[#FDEEEC] text-[#D9383A]';
       case 'converted':
       case 'purple':
-        return 'bg-[#EDE5F0] text-[#714B67] border-[#DFCDE2]';
+        return 'bg-[#F6EDF3] text-[#7A4C72]';
       case 'draft':
+      case 'closed':
       default:
-        return 'bg-[#F3F5F8] text-[#696A75] border-[#E9EBEF]';
+        return 'bg-[#F3F4F6] text-[#6B7280]';
     }
   };
 
-  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs';
+  const sizeStyles = size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3 py-1 text-xs';
 
   return (
     <span
-      className={`inline-flex items-center font-medium rounded-md border tracking-tight ${sizeClasses} ${getStyles(
+      className={`inline-flex items-center gap-1.5 font-medium rounded-full ${getStyles(
         variant
-      )}`}
+      )} ${sizeStyles} ${className}`}
     >
-      {children}
+      <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
+      <span className="capitalize">{children}</span>
     </span>
   );
 };

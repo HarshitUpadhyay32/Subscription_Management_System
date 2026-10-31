@@ -46,7 +46,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-[#E9EBEF]">
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#714B67] text-white flex items-center justify-center font-bold text-sm">
+              <div className="w-8 h-8 rounded-lg bg-[#7A4C72] text-white flex items-center justify-center font-bold text-sm">
                 BL
               </div>
               <div>
@@ -155,7 +155,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
             </div>
             <div className="pt-2 border-t border-[#E9EBEF] flex justify-between font-semibold text-sm text-[#34313A]">
               <span>Grand Total:</span>
-              <span className="font-mono text-[#714B67] tabular-nums">
+              <span className="font-mono text-[#7A4C72] tabular-nums">
                 ₹{invoice.total.toLocaleString('en-IN')}
               </span>
             </div>
@@ -192,7 +192,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({
                   onClose();
                   onPayNow(invoice);
                 }}
-                className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 shadow-sm transition-colors"
+                className="px-4 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 shadow-sm transition-colors"
               >
                 <CreditCard className="w-3.5 h-3.5" />
                 Pay Now (₹{invoice.total.toLocaleString('en-IN')})

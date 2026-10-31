@@ -60,7 +60,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
-            <div className="sub-caps text-[#714B67] mb-1">Customer Workspace</div>
+            <div className="sub-caps text-[#7A4C72] mb-1">Customer Workspace</div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#29252A] font-serif">
                 Welcome back, {currentUser?.name?.split(' ')[0] || 'Rahul'}
@@ -78,12 +78,12 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
               onClick={() => onNavigate('my-invoices')}
               className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#E9EBEF] bg-white hover:bg-[#F3F5F8] text-[#29252A] flex items-center gap-1.5 transition-colors"
             >
-              <Receipt className="w-3.5 h-3.5 text-[#714B67]" />
+              <Receipt className="w-3.5 h-3.5 text-[#7A4C72]" />
               <span>My Invoices</span>
             </button>
             <button
               onClick={() => setIsUpgradeModalOpen(true)}
-              className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
+              className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Change Plan</span>
@@ -106,7 +106,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-lg font-bold text-[#34313A]">{activeSub.productName}</h2>
-                    <div className="text-xs font-medium text-[#714B67]">{activeSub.planName} Tier</div>
+                    <div className="text-xs font-medium text-[#7A4C72]">{activeSub.planName} Tier</div>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold font-mono text-[#34313A] tabular-nums">
@@ -125,7 +125,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
                   <div className="flex justify-between text-[#696A75]">
                     <span>Next Auto-Renewal Date:</span>
                     <span className="font-medium text-[#34313A] flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-[#714B67]" />
+                      <Calendar className="w-3 h-3 text-[#7A4C72]" />
                       {activeSub.renewalDate}
                     </span>
                   </div>
@@ -137,7 +137,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
                 <div className="mt-6 pt-4 border-t border-[#E9EBEF] flex items-center justify-between">
                   <button
                     onClick={() => setIsUpgradeModalOpen(true)}
-                    className="text-xs text-[#714B67] hover:underline font-semibold"
+                    className="text-xs text-[#7A4C72] hover:underline font-semibold"
                   >
                     Upgrade Tier
                   </button>
@@ -178,12 +178,12 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
                 {pendingInvoices.map((inv) => (
                   <div key={inv.id} className="flex items-center justify-between text-xs">
                     <div>
-                      <span className="font-mono text-[#714B67]">{inv.invoiceNumber}</span>
+                      <span className="font-mono text-[#7A4C72]">{inv.invoiceNumber}</span>
                       <div className="text-[10px] text-[#92939D]">Due {inv.dueDate}</div>
                     </div>
                     <button
                       onClick={() => setPayingInvoice(inv)}
-                      className="px-3 py-1 text-xs font-medium rounded-lg bg-[#714B67] text-white hover:bg-[#603D56] transition-colors"
+                      className="px-3 py-1 text-xs font-medium rounded-lg bg-[#7A4C72] text-white hover:bg-[#683B60] transition-colors"
                     >
                       Pay Now (₹{inv.total.toLocaleString('en-IN')})
                     </button>
@@ -208,7 +208,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
               </div>
               <button
                 onClick={() => onNavigate('my-invoices')}
-                className="text-xs text-[#714B67] hover:underline font-medium"
+                className="text-xs text-[#7A4C72] hover:underline font-medium"
               >
                 View All
               </button>
@@ -221,7 +221,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-medium text-xs text-[#714B67]">
+                      <span className="font-mono font-medium text-xs text-[#7A4C72]">
                         {inv.invoiceNumber}
                       </span>
                       <Badge variant={inv.status}>{inv.status.toUpperCase()}</Badge>
@@ -245,7 +245,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
                       {inv.status === 'pending' && (
                         <button
                           onClick={() => setPayingInvoice(inv)}
-                          className="px-2 py-0.5 text-[11px] rounded bg-[#714B67] text-white hover:bg-[#603D56]"
+                          className="px-2 py-0.5 text-[11px] rounded bg-[#7A4C72] text-white hover:bg-[#683B60]"
                         >
                           Pay
                         </button>
@@ -263,7 +263,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
               <span className="text-xs font-semibold text-[#34313A]">Recent Settlements</span>
               <button
                 onClick={() => onNavigate('payment-history')}
-                className="text-xs text-[#714B67] hover:underline font-medium"
+                className="text-xs text-[#7A4C72] hover:underline font-medium"
               >
                 Full History
               </button>
@@ -305,7 +305,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
         <div className="space-y-4 text-xs text-[#34313A]">
           <div className="p-4 bg-[#F8F9FB] rounded-xl border border-[#E9EBEF]">
             <span className="font-semibold text-sm">Recommended: Professional Annual Tier</span>
-            <div className="my-1 text-base font-bold font-mono text-[#714B67]">
+            <div className="my-1 text-base font-bold font-mono text-[#7A4C72]">
               ₹14,990 / year
             </div>
             <p className="text-xs text-[#696A75]">
@@ -319,7 +319,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
             <textarea
               rows={2}
               placeholder="e.g. Please add 5 extra sales agent seats..."
-              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
             />
           </div>
           <div className="flex justify-end gap-2 pt-3 border-t border-[#E9EBEF]">
@@ -331,7 +331,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
             </button>
             <button
               onClick={handleRequestUpgrade}
-              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white"
+              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white"
             >
               Submit Upgrade Request
             </button>
@@ -353,7 +353,7 @@ export const CustomerOverview: React.FC<CustomerOverviewProps> = ({ onNavigate }
           </p>
           <div>
             <label className="block text-xs font-medium text-[#34313A] mb-1">Reason for Cancellation</label>
-            <select className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]">
+            <select className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]">
               <option>Project completed / No longer needed</option>
               <option>Budget constraints</option>
               <option>Switching to another solution</option>

@@ -40,12 +40,12 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
-            <div className="sub-caps text-[#714B67] mb-1">Staff Console</div>
+            <div className="sub-caps text-[#7A4C72] mb-1">Staff Console</div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#29252A] font-serif">
                 Operations & Customer Desk
               </h1>
-              <span className="text-[10px] font-semibold bg-[#EDE5F0] text-[#714B67] px-2 py-0.5 rounded-md uppercase tracking-wider">
+              <span className="text-[10px] font-semibold bg-[#F6EDF3] text-[#7A4C72] px-2 py-0.5 rounded-md uppercase tracking-wider">
                 Staff Access
               </span>
             </div>
@@ -56,7 +56,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => onNavigate('subscriptions')}
-              className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
+              className="px-3.5 py-2 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New Subscription</span>
@@ -65,7 +65,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
               onClick={() => onNavigate('quotations')}
               className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#E9EBEF] bg-white hover:bg-[#F3F5F8] text-[#29252A] flex items-center gap-1.5 transition-colors"
             >
-              <Send className="w-3.5 h-3.5 text-[#714B67]" />
+              <Send className="w-3.5 h-3.5 text-[#7A4C72]" />
               <span>Send Quote</span>
             </button>
           </div>
@@ -110,7 +110,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
               </div>
               <button
                 onClick={() => onNavigate('quotations')}
-                className="text-xs text-[#714B67] hover:underline font-medium"
+                className="text-xs text-[#7A4C72] hover:underline font-medium"
               >
                 View All
               </button>
@@ -123,7 +123,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-medium text-xs text-[#714B67]">
+                      <span className="font-mono font-medium text-xs text-[#7A4C72]">
                         {q.quotationNumber}
                       </span>
                       <Badge variant={q.status}>{q.status.toUpperCase()}</Badge>
@@ -137,7 +137,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
                     </span>
                     <button
                       onClick={() => onNavigate('quotations')}
-                      className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#714B67] text-white hover:bg-[#603D56] transition-colors"
+                      className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#7A4C72] text-white hover:bg-[#683B60] transition-colors"
                     >
                       Process Quote
                     </button>
@@ -153,30 +153,30 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
               <button
                 onClick={() => onNavigate('customers')}
-                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#EDE5F0]/50 text-[#34313A] transition-colors"
+                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#F6EDF3]/50 text-[#34313A] transition-colors"
               >
-                <Users className="w-4 h-4 mx-auto mb-1 text-[#714B67]" />
+                <Users className="w-4 h-4 mx-auto mb-1 text-[#7A4C72]" />
                 <span className="font-medium">Client Roster</span>
               </button>
               <button
                 onClick={() => onNavigate('subscriptions')}
-                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#EDE5F0]/50 text-[#34313A] transition-colors"
+                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#F6EDF3]/50 text-[#34313A] transition-colors"
               >
-                <Repeat className="w-4 h-4 mx-auto mb-1 text-[#714B67]" />
+                <Repeat className="w-4 h-4 mx-auto mb-1 text-[#7A4C72]" />
                 <span className="font-medium">Subscriptions</span>
               </button>
               <button
                 onClick={() => onNavigate('quotations')}
-                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#EDE5F0]/50 text-[#34313A] transition-colors"
+                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#F6EDF3]/50 text-[#34313A] transition-colors"
               >
-                <FileSpreadsheet className="w-4 h-4 mx-auto mb-1 text-[#714B67]" />
+                <FileSpreadsheet className="w-4 h-4 mx-auto mb-1 text-[#7A4C72]" />
                 <span className="font-medium">Proposals</span>
               </button>
               <button
                 onClick={() => onNavigate('invoices')}
-                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#EDE5F0]/50 text-[#34313A] transition-colors"
+                className="p-3 rounded-xl bg-[#F8F9FB] hover:bg-[#F6EDF3]/50 text-[#34313A] transition-colors"
               >
-                <Receipt className="w-4 h-4 mx-auto mb-1 text-[#714B67]" />
+                <Receipt className="w-4 h-4 mx-auto mb-1 text-[#7A4C72]" />
                 <span className="font-medium">Billings</span>
               </button>
             </div>
@@ -190,7 +190,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
               <span className="text-xs font-semibold text-[#34313A]">Upcoming Cycle Renewals</span>
               <button
                 onClick={() => onNavigate('subscriptions')}
-                className="text-[11px] text-[#714B67] hover:underline font-medium"
+                className="text-[11px] text-[#7A4C72] hover:underline font-medium"
               >
                 Manage
               </button>
@@ -223,7 +223,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
               <span className="text-xs font-semibold text-[#34313A]">Pending Invoices</span>
               <button
                 onClick={() => onNavigate('invoices')}
-                className="text-[11px] text-[#714B67] hover:underline font-medium"
+                className="text-[11px] text-[#7A4C72] hover:underline font-medium"
               >
                 View All
               </button>
@@ -235,7 +235,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F8F9FB] border border-[#E9EBEF] text-xs"
                 >
                   <div>
-                    <div className="font-mono text-[11px] text-[#714B67] font-medium">
+                    <div className="font-mono text-[11px] text-[#7A4C72] font-medium">
                       {inv.invoiceNumber}
                     </div>
                     <div className="text-[#34313A] font-medium">{inv.customerName}</div>
@@ -246,7 +246,7 @@ export const StaffOverview: React.FC<StaffOverviewProps> = ({ onNavigate }) => {
                     </div>
                     <button
                       onClick={() => setPayingInvoice(inv)}
-                      className="text-[10px] text-[#714B67] hover:underline font-medium"
+                      className="text-[10px] text-[#7A4C72] hover:underline font-medium"
                     >
                       Record Payment
                     </button>

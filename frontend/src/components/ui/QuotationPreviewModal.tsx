@@ -61,7 +61,7 @@ export const QuotationPreviewModal: React.FC<QuotationPreviewModalProps> = ({
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-[#E9EBEF]">
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#714B67] text-white flex items-center justify-center font-bold text-sm">
+              <div className="w-8 h-8 rounded-lg bg-[#7A4C72] text-white flex items-center justify-center font-bold text-sm">
                 BL
               </div>
               <div>
@@ -160,7 +160,7 @@ export const QuotationPreviewModal: React.FC<QuotationPreviewModalProps> = ({
             </div>
             <div className="pt-2 border-t border-[#E9EBEF] flex justify-between font-semibold text-sm text-[#34313A]">
               <span>Grand Total:</span>
-              <span className="font-mono text-[#714B67] tabular-nums">
+              <span className="font-mono text-[#7A4C72] tabular-nums">
                 ₹{quotation.totalAmount.toLocaleString('en-IN')}
               </span>
             </div>
@@ -189,7 +189,7 @@ export const QuotationPreviewModal: React.FC<QuotationPreviewModalProps> = ({
                 onClick={handleSend}
                 className="px-4 py-2 text-xs font-medium rounded-xl bg-[#F3F5F8] hover:bg-[#E9EBEF] text-[#34313A] flex items-center gap-1.5 transition-colors"
               >
-                <Send className="w-3.5 h-3.5 text-[#714B67]" />
+                <Send className="w-3.5 h-3.5 text-[#7A4C72]" />
                 Send to Customer
               </button>
             )}
@@ -205,7 +205,7 @@ export const QuotationPreviewModal: React.FC<QuotationPreviewModalProps> = ({
             {currentRole !== 'customer' && (quotation.status === 'approved' || quotation.status === 'sent') && (
               <button
                 onClick={handleConvert}
-                className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1 shadow-sm transition-colors"
+                className="px-4 py-2 text-xs font-medium rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1 shadow-sm transition-colors"
               >
                 <ArrowRightCircle className="w-3.5 h-3.5" />
                 Convert to Live Subscription

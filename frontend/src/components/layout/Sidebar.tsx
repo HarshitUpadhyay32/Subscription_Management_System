@@ -14,7 +14,6 @@ import {
   UserCheck,
   LogOut,
   X,
-  Compass,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
@@ -46,108 +45,74 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const getNavItems = (role: UserRole): NavItem[] => {
     if (role === 'admin') {
       return [
-        { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+        { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'products', label: 'Products & Plans', icon: Package },
         { id: 'customers', label: 'Customers', icon: Users },
         { id: 'subscriptions', label: 'Subscriptions', icon: Repeat },
         { id: 'quotations', label: 'Quotations', icon: FileSpreadsheet, badge: pendingQuotationsCount || undefined },
-        { id: 'invoices', label: 'Invoices & Payments', icon: Receipt, badge: pendingInvoicesCount || undefined },
+        { id: 'invoices', label: 'Invoices', icon: Receipt, badge: pendingInvoicesCount || undefined },
+        { id: 'payments', label: 'Payments', icon: CreditCard },
         { id: 'discounts-taxes', label: 'Discounts & Taxes', icon: Percent },
+        { id: 'analytics', label: 'Reports', icon: BarChart3 },
         { id: 'staff', label: 'Staff Management', icon: UserCog },
-        { id: 'analytics', label: 'Analytics & Reports', icon: BarChart3 },
-        { id: 'settings', label: 'Settings', icon: Settings },
       ];
     }
     if (role === 'staff') {
       return [
-        { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-        { id: 'customers', label: 'Customers', icon: Users },
-        { id: 'subscriptions', label: 'Subscriptions', icon: Repeat },
+        { id: 'overview', label: 'Staff Dashboard', icon: LayoutDashboard },
+        { id: 'customers', label: 'Customer Management', icon: Users },
+        { id: 'subscriptions', label: 'Manage Subscriptions', icon: Repeat },
         { id: 'quotations', label: 'Quotations', icon: FileSpreadsheet, badge: pendingQuotationsCount || undefined },
         { id: 'invoices', label: 'Invoices & Payments', icon: Receipt, badge: pendingInvoicesCount || undefined },
       ];
     }
-    // Customer Portal
+    // Customer Portal per Flowchart Image 2
     return [
-      { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+      { id: 'overview', label: 'Customer Portal', icon: LayoutDashboard },
       { id: 'my-subscriptions', label: 'My Subscriptions', icon: Repeat },
       { id: 'my-invoices', label: 'My Invoices', icon: Receipt },
-      { id: 'payment-history', label: 'Payment History', icon: CreditCard },
       { id: 'account-settings', label: 'Account Settings', icon: UserCheck },
     ];
   };
 
   const navItems = getNavItems(currentRole);
 
-  const sidebarContent = (
-    <div className="flex flex-col h-full bg-white border-r border-[#E9EBEF]">
-      {/* Brand logo */}
-      <div className="p-5 flex items-center justify-between border-b border-[#E9EBEF]">
-        <button
-          onClick={() => onNavigate('overview')}
-          className="flex items-center gap-2.5 text-left focus:outline-none"
-        >
-          <div className="w-9 h-9 rounded-xl bg-[#714B67] text-white flex items-center justify-center font-bold text-base shadow-[0_2px_8px_rgba(113,75,103,0.3)]">
-            BL
-          </div>
-          <div>
-            <div className="text-lg font-bold text-[#29252A] tracking-tight font-serif flex items-center gap-1.5">
-              Brightloop
-            </div>
-            <div className="sub-caps">
-              {currentRole === 'admin'
-                ? 'Admin Workspace'
-                : currentRole === 'staff'
-                ? 'Staff Console'
-                : 'Customer Portal'}
-            </div>
-          </div>
-        </button>
-        {isOpenMobile && (
-          <button
-            onClick={onCloseMobile}
-            className="md:hidden p-1.5 text-[#92939D] hover:text-[#34313A]"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
-      </div>
+  const handleNavClick = (id: string) => {
+    onNavigate(id);
+    onCloseMobile();
+  };
 
-      {/* Navigation List */}
-      <div className="flex-1 py-4 px-3 overflow-y-auto space-y-1">
-        <div className="text-[10px] font-semibold uppercase tracking-wider text-[#92939D] px-3 py-1.5 mb-1">
-          Navigation
-        </div>
+  const sidebarContent = (
+    <div className="flex flex-col h-full bg-white border-r border-gray-200 w-60 select-none">
+      {/* Navigation items list */}
+      <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentPath === item.id;
           return (
             <button
               key={item.id}
-              onClick={() => {
-                onNavigate(item.id);
-                onCloseMobile();
-              }}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
+              onClick={() => handleNavClick(item.id)}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                 isActive
-                  ? 'bg-[#EDE5F0] text-[#714B67] shadow-[0_1px_3px_rgba(113,75,103,0.06)] font-semibold'
-                  : 'text-[#696A75] hover:bg-[#F3F5F8] hover:text-[#34313A]'
+                  ? 'bg-[#F6EDF3] text-[#7A4C72] font-semibold'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >
-              <div className="flex items-center gap-3 truncate">
+              <div className="flex items-center gap-3 min-w-0">
                 <Icon
                   className={`w-4 h-4 shrink-0 transition-colors ${
-                    isActive ? 'text-[#714B67]' : 'text-[#92939D]'
+                    isActive ? 'text-[#7A4C72]' : 'text-gray-400 group-hover:text-gray-600'
                   }`}
                 />
                 <span className="truncate">{item.label}</span>
               </div>
               {item.badge !== undefined && (
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
                     isActive
-                      ? 'bg-[#714B67] text-white'
-                      : 'bg-[#F3F5F8] text-[#92939D]'
+                      ? 'bg-[#7A4C72] text-white'
+                      : 'bg-gray-100 text-gray-600'
                   }`}
                 >
                   {item.badge}
@@ -158,28 +123,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Bottom section */}
-      <div className="p-3 border-t border-[#E9EBEF] space-y-1">
-        <button
-          onClick={() => {
-            onNavigate('landing');
-            onCloseMobile();
-          }}
-          className="w-full flex items-center gap-3 px-3.5 py-2 text-xs font-medium text-[#696A75] hover:text-[#34313A] hover:bg-[#F3F5F8] rounded-xl transition-colors"
-        >
-          <Compass className="w-4 h-4 text-[#92939D]" />
-          <span>Marketing Website</span>
-        </button>
+      {/* Bottom Area: User role tag and Logout */}
+      <div className="p-3 border-t border-gray-100">
         <button
           onClick={() => {
             logout();
             onNavigate('landing');
-            onCloseMobile();
           }}
-          className="w-full flex items-center gap-3 px-3.5 py-2 text-xs font-medium text-[#DC6464] hover:bg-[#FDF2F2] rounded-xl transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition-colors"
         >
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <LogOut className="w-4 h-4 text-rose-500" />
+          <span>Logout</span>
         </button>
       </div>
     </div>
@@ -187,19 +141,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Desktop fixed sidebar */}
-      <aside className="hidden md:block w-64 shrink-0 h-screen sticky top-0 z-20">
+      {/* Desktop sidebar */}
+      <aside className="hidden md:block shrink-0 sticky top-14 h-[calc(100vh-56px)] z-10">
         {sidebarContent}
       </aside>
+
       {/* Mobile drawer */}
       {isOpenMobile && (
-        <div className="md:hidden fixed inset-0 z-50 flex">
+        <div className="fixed inset-0 z-50 md:hidden flex">
           <div
-            className="fixed inset-0 bg-[#34313A]/30 backdrop-blur-xs"
+            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={onCloseMobile}
           />
-          <div className="relative w-72 max-w-[80vw] h-full shadow-2xl">
-            {sidebarContent}
+          <div className="relative w-64 max-w-[80vw] bg-white h-full shadow-2xl flex flex-col z-10">
+            <div className="p-3 bg-[#7A4C72] text-white flex items-center justify-between">
+              <span className="font-bold text-sm">Brightloop Menu</span>
+              <button
+                onClick={onCloseMobile}
+                className="p-1 rounded-lg hover:bg-white/10 text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {sidebarContent}
+            </div>
           </div>
         </div>
       )}

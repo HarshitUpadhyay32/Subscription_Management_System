@@ -1,5 +1,5 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface StatCardProps {
   title: string;
@@ -11,7 +11,6 @@ interface StatCardProps {
     label?: string;
   };
   icon?: LucideIcon;
-  accent?: 'purple' | 'blue' | 'default';
   onClick?: () => void;
 }
 
@@ -21,46 +20,48 @@ export const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   trend,
   icon: Icon,
-  accent = 'default',
   onClick,
 }) => {
-  const accentBorders = {
-    purple: 'border-[#EDE5F0] hover:border-[#714B67]/30',
-    blue: 'border-[#EAF0F8] hover:border-[#3B82F6]/30',
-    default: 'border-[#E9EBEF] hover:border-[#CBD0D8]',
-  };
-
   return (
     <div
       onClick={onClick}
-      className={`bg-white rounded-2xl p-5 border shadow-[0_2px_12px_rgba(0,0,0,0.02)] transition-all ${
-        accentBorders[accent]
-      } ${onClick ? 'cursor-pointer hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)]' : ''}`}
+      className={`bg-white rounded-xl p-5 border border-gray-200/90 shadow-sm transition-all ${
+        onClick ? 'cursor-pointer hover:border-[#7A4C72]/40 hover:shadow-md' : ''
+      }`}
     >
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[10px] font-semibold text-[#92939D] tracking-wider uppercase">{title}</span>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-medium text-gray-500">{title}</span>
         {Icon && (
-          <div className="w-8 h-8 rounded-xl bg-[#F5F5F6] text-[#714B67] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-[#F6EDF3] text-[#7A4C72] flex items-center justify-center">
             <Icon className="w-4 h-4" />
           </div>
         )}
       </div>
-      <div className="text-2xl font-bold text-[#29252A] tracking-tight font-mono tabular-nums">
+
+      <div className="text-2xl font-bold text-gray-900 tracking-tight">
         {value}
       </div>
-      {(trend || subtitle) && (
-        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-[#92939D]">
-          {trend && (
-            <span
-              className={`font-medium ${
-                trend.isPositive ? 'text-[#28A879]' : 'text-[#DC6464]'
-              }`}
-            >
-              {trend.value}
-            </span>
-          )}
-          <span>{trend?.label || subtitle}</span>
+
+      {trend && (
+        <div className="flex items-center gap-1.5 mt-2 text-xs">
+          <span
+            className={`inline-flex items-center font-medium ${
+              trend.isPositive !== false ? 'text-emerald-600' : 'text-rose-600'
+            }`}
+          >
+            {trend.isPositive !== false ? (
+              <ArrowUpRight className="w-3.5 h-3.5 mr-0.5" />
+            ) : (
+              <ArrowDownRight className="w-3.5 h-3.5 mr-0.5" />
+            )}
+            {trend.value}
+          </span>
+          {trend.label && <span className="text-gray-400">{trend.label}</span>}
         </div>
+      )}
+
+      {subtitle && !trend && (
+        <div className="text-xs text-gray-400 mt-2">{subtitle}</div>
       )}
     </div>
   );

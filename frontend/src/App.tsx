@@ -35,9 +35,7 @@ const MainApp: React.FC = () => {
   const { currentUser, currentRole, switchRole } = useApp();
 
   // Root view can be 'landing' | 'login' | 'register' | 'forgot-password' | 'dashboard'
-  const [rootView, setRootView] = useState<'landing' | 'login' | 'register' | 'forgot-password' | 'dashboard'>(
-    currentUser ? 'dashboard' : 'landing'
-  );
+  const [rootView, setRootView] = useState<'landing' | 'login' | 'register' | 'forgot-password' | 'dashboard'>('landing');
 
   // Sub-path inside dashboard
   const [currentPath, setCurrentPath] = useState<string>('overview');
@@ -124,7 +122,9 @@ const MainApp: React.FC = () => {
         case 'quotations':
           return <QuotationsPage searchQuery={searchQuery} />;
         case 'invoices':
-          return <InvoicesPaymentsPage searchQuery={searchQuery} />;
+          return <InvoicesPaymentsPage searchQuery={searchQuery} initialTab="invoices" />;
+        case 'payments':
+          return <InvoicesPaymentsPage searchQuery={searchQuery} initialTab="payments" />;
         case 'discounts-taxes':
           return <DiscountsTaxesPage searchQuery={searchQuery} />;
         case 'staff':
@@ -149,13 +149,15 @@ const MainApp: React.FC = () => {
         case 'quotations':
           return <QuotationsPage searchQuery={searchQuery} />;
         case 'invoices':
-          return <InvoicesPaymentsPage searchQuery={searchQuery} />;
+          return <InvoicesPaymentsPage searchQuery={searchQuery} initialTab="invoices" />;
+        case 'payments':
+          return <InvoicesPaymentsPage searchQuery={searchQuery} initialTab="payments" />;
         default:
           return <StaffOverview onNavigate={(p) => setCurrentPath(p)} searchQuery={searchQuery} />;
       }
     }
 
-    // Customer Portal (Rahul Sharma)
+    // Customer Portal
     switch (currentPath) {
       case 'overview':
         return <CustomerOverview onNavigate={(p) => setCurrentPath(p)} />;

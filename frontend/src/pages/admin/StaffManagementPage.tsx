@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
   Plus,
+  Filter,
+  Search,
+  MoreHorizontal,
   Edit2,
-  ToggleLeft,
-  ToggleRight,
-  Mail,
-  Calendar,
+  Trash2,
+  UserCheck,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { StaffMember } from '../../types';
@@ -14,28 +15,29 @@ import { Badge } from '../../components/ui/Badge';
 
 export const StaffManagementPage: React.FC<{ searchQuery?: string }> = ({ searchQuery = '' }) => {
   const { staff, addStaff, updateStaff, toggleStaffStatus } = useApp();
+  const [localSearch, setLocalSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingStaff, setEditingStaff] = useState<StaffMember | null>(null);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<StaffMember['role']>('Billing Operations');
-  const [department, setDepartment] = useState('Finance & Operations');
+  const [role, setRole] = useState('Staff');
+  const [status, setStatus] = useState<'active' | 'inactive'>('active');
 
+  const effectiveQuery = searchQuery || localSearch;
   const filteredStaff = staff.filter(
     (s) =>
-      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.department.toLowerCase().includes(searchQuery.toLowerCase())
+      s.name.toLowerCase().includes(effectiveQuery.toLowerCase()) ||
+      s.email.toLowerCase().includes(effectiveQuery.toLowerCase()) ||
+      s.role.toLowerCase().includes(effectiveQuery.toLowerCase())
   );
 
   const openAddModal = () => {
     setEditingStaff(null);
     setName('');
     setEmail('');
-    setRole('Billing Operations');
-    setDepartment('Finance & Invoicing');
+    setRole('Staff');
+    setStatus('active');
     setIsModalOpen(true);
   };
 
@@ -44,26 +46,29 @@ export const StaffManagementPage: React.FC<{ searchQuery?: string }> = ({ search
     setName(s.name);
     setEmail(s.email);
     setRole(s.role);
-    setDepartment(s.department);
+    setStatus(s.status);
     setIsModalOpen(true);
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name.trim()) return;
+
     if (editingStaff) {
       updateStaff(editingStaff.id, {
         name,
         email,
-        role,
-        department,
+        role: role as any,
+        status,
       });
     } else {
       addStaff({
         name,
         email,
-        role,
-        department,
-        status: 'active',
+        role: role as any,
+        department: 'Operations',
+        status,
+        lastLogin: 'Today',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       });
     }
@@ -71,163 +76,159 @@ export const StaffManagementPage: React.FC<{ searchQuery?: string }> = ({ search
   };
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
+    <div className="space-y-6 font-sans">
+      {/* Header matching Image 1 screen 12 */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#34313A] font-heading">
-            Staff & Role-Based Access Control
-          </h1>
-          <p className="text-xs text-[#92939D] mt-0.5">
-            Administer internal operators, billing specialists, customer support teams, and permissions.
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">Staff Management</h1>
+          <p className="text-xs text-gray-500 mt-0.5">Manage staff members and their roles</p>
         </div>
+
         <button
           onClick={openAddModal}
-          className="px-3.5 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-1.5 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors self-start sm:self-auto"
+          className="px-4 py-2 text-xs font-semibold rounded-lg bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-1.5 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Add Staff Member</span>
+          <span>Add Staff</span>
         </button>
       </div>
 
-      {/* Staff Grid Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredStaff.map((member) => (
-          <div
-            key={member.id}
-            className="bg-white rounded-2xl p-5 border border-[#E9EBEF] shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-start justify-between">
-                <img
-                  src={member.avatar}
-                  alt={member.name}
-                  className="w-12 h-12 rounded-xl object-cover border border-[#E9EBEF]"
-                />
-                <button
-                  onClick={() => toggleStaffStatus(member.id)}
-                  title="Toggle status"
-                  className="text-[#92939D] hover:text-[#34313A]"
-                >
-                  {member.status === 'active' ? (
-                    <ToggleRight className="w-6 h-6 text-[#28A879]" />
-                  ) : (
-                    <ToggleLeft className="w-6 h-6 text-[#92939D]" />
-                  )}
-                </button>
-              </div>
-              <div className="mt-3">
-                <h3 className="font-semibold text-sm text-[#34313A]">{member.name}</h3>
-                <div className="text-[11px] text-[#714B67] font-medium mt-0.5">{member.role}</div>
-                <div className="text-[11px] text-[#92939D]">{member.department}</div>
-              </div>
-              <div className="mt-4 pt-3 border-t border-[#E9EBEF] space-y-1 text-[11px] text-[#92939D]">
-                <div className="flex items-center gap-1.5 truncate">
-                  <Mail className="w-3 h-3 shrink-0" />
-                  <span className="truncate">{member.email}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3 h-3 shrink-0" />
-                  <span>Joined {member.joinedDate}</span>
-                </div>
-                <div className="flex justify-between pt-1">
-                  <span>Assigned Portfolios:</span>
-                  <span className="font-mono text-[#34313A] font-medium">
-                    {member.assignedCustomersCount} Clients
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="mt-4 pt-3 border-t border-[#E9EBEF] flex items-center justify-between">
-              <Badge variant={member.status === 'active' ? 'active' : 'draft'}>
-                {member.status.toUpperCase()}
-              </Badge>
-              <button
-                onClick={() => openEditModal(member)}
-                className="p-1.5 rounded-lg text-[#696A75] hover:text-[#34313A] hover:bg-[#F3F5F8]"
-                title="Edit staff member"
-              >
-                <Edit2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Modal: Add/Edit Staff */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={editingStaff ? 'Edit Staff Credentials' : 'Add Staff Member'}
-        subtitle="Configure role privileges and operational department"
-      >
-        <form onSubmit={handleSave} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-[#34313A] mb-1">Full Name</label>
+      {/* Main card */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        {/* Toolbar */}
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Arjun Nair"
-              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+              placeholder="Search staff members..."
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              className="pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:bg-white focus:border-[#7A4C72] w-64"
             />
           </div>
-          <div>
-            <label className="block text-xs font-medium text-[#34313A] mb-1">Work Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="arjun@brightloop.io"
-              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
+
+          <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 flex items-center gap-1.5">
+            <Filter className="w-3 h-3 text-gray-500" />
+            <span>Filter</span>
+          </button>
+        </div>
+
+        {/* Table matching Image 1 screen 12 */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#F8F9FA] text-gray-500 font-semibold border-b border-gray-100">
+              <tr>
+                <th className="px-5 py-3">Name</th>
+                <th className="px-5 py-3">Email</th>
+                <th className="px-5 py-3">Role</th>
+                <th className="px-5 py-3">Status</th>
+                <th className="px-5 py-3">Last Login</th>
+                <th className="px-5 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 text-gray-700">
+              {filteredStaff.map((member) => (
+                <tr key={member.id} className="hover:bg-gray-50/80 transition-colors">
+                  <td className="px-5 py-3 font-semibold text-gray-900">{member.name}</td>
+                  <td className="px-5 py-3 text-gray-500">{member.email}</td>
+                  <td className="px-5 py-3 text-gray-700 font-medium">Staff</td>
+                  <td className="px-5 py-3">
+                    <Badge variant={member.status}>{member.status}</Badge>
+                  </td>
+                  <td className="px-5 py-3 text-gray-500">{member.lastLogin || '30 Oct 2026'}</td>
+                  <td className="px-5 py-3 text-right">
+                    <button
+                      onClick={() => openEditModal(member)}
+                      className="p-1 text-gray-400 hover:text-gray-700 rounded hover:bg-gray-100"
+                    >
+                      <MoreHorizontal className="w-4 h-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Add / Edit Staff Modal */}
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title={editingStaff ? 'Edit Staff Member' : 'Add Staff Member'}
+        >
+          <form onSubmit={handleSave} className="space-y-4 font-sans text-xs">
             <div>
-              <label className="block text-xs font-medium text-[#34313A] mb-1">Role Privileges</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as any)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-              >
-                <option value="Super Admin">Super Admin (Unrestricted)</option>
-                <option value="Billing Operations">Billing Operations</option>
-                <option value="Customer Support">Customer Support</option>
-                <option value="Sales Representative">Sales Representative</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-[#34313A] mb-1">Department</label>
+              <label className="block font-semibold text-gray-700 mb-1">Full Name *</label>
               <input
                 type="text"
                 required
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                placeholder="e.g. Finance & Invoicing"
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Rahul Mehta"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
-          </div>
-          <div className="flex justify-end gap-2 pt-3 border-t border-[#E9EBEF]">
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-xs font-medium rounded-xl border border-[#E9EBEF] text-[#34313A] hover:bg-[#F3F5F8]"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 text-xs font-medium rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white"
-            >
-              {editingStaff ? 'Update Member' : 'Enrol Staff Member'}
-            </button>
-          </div>
-        </form>
-      </Modal>
+
+            <div>
+              <label className="block font-semibold text-gray-700 mb-1">Email *</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="rahul@brightloop.com"
+                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#7A4C72]"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block font-semibold text-gray-700 mb-1">Role</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#7A4C72]"
+                >
+                  <option value="Staff">Staff</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Manager">Manager</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-gray-700 mb-1">Status</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as any)}
+                  className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#7A4C72]"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="pt-4 flex justify-end gap-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 font-semibold bg-[#7A4C72] hover:bg-[#683B60] text-white rounded-lg shadow-sm"
+              >
+                Save Staff
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };

@@ -70,7 +70,7 @@ export const SettingsPage: React.FC = () => {
         {/* Company Profile Card */}
         <div className="bg-white rounded-2xl p-6 border border-[#E9EBEF] shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E9EBEF]">
-            <Building2 className="w-4 h-4 text-[#714B67]" />
+            <Building2 className="w-4 h-4 text-[#7A4C72]" />
             <h2 className="text-sm font-semibold text-[#34313A]">Company & Tax Identity</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -81,7 +81,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -91,7 +91,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={legalEntity}
                 onChange={(e) => setLegalEntity(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -103,7 +103,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={gstin}
                 onChange={(e) => setGstin(e.target.value.toUpperCase())}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -113,7 +113,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -123,7 +123,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -134,7 +134,7 @@ export const SettingsPage: React.FC = () => {
               required
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+              className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
             />
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -145,7 +145,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -155,7 +155,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={state}
                 onChange={(e) => setState(e.target.value)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -165,7 +165,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={pincode}
                 onChange={(e) => setPincode(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -174,7 +174,7 @@ export const SettingsPage: React.FC = () => {
         {/* Invoice & Serial Prefixes Card */}
         <div className="bg-white rounded-2xl p-6 border border-[#E9EBEF] shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E9EBEF]">
-            <Receipt className="w-4 h-4 text-[#714B67]" />
+            <Receipt className="w-4 h-4 text-[#7A4C72]" />
             <h2 className="text-sm font-semibold text-[#34313A]">Document Numbering & Terms</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -185,7 +185,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={invoicePrefix}
                 onChange={(e) => setInvoicePrefix(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -195,7 +195,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={quotationPrefix}
                 onChange={(e) => setQuotationPrefix(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
             <div>
@@ -205,7 +205,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={subscriptionPrefix}
                 onChange={(e) => setSubscriptionPrefix(e.target.value)}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -230,7 +230,7 @@ export const SettingsPage: React.FC = () => {
                 required
                 value={defaultPaymentTermsDays}
                 onChange={(e) => setDefaultPaymentTermsDays(Number(e.target.value))}
-                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
+                className="w-full px-3 py-2 text-xs font-mono rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#7A4C72]"
               />
             </div>
           </div>
@@ -239,7 +239,7 @@ export const SettingsPage: React.FC = () => {
         {/* Automation & Notification Settings */}
         <div className="bg-white rounded-2xl p-6 border border-[#E9EBEF] shadow-[0_2px_12px_rgba(0,0,0,0.02)] space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-[#E9EBEF]">
-            <Bell className="w-4 h-4 text-[#714B67]" />
+            <Bell className="w-4 h-4 text-[#7A4C72]" />
             <h2 className="text-sm font-semibold text-[#34313A]">Automation & Notifications</h2>
           </div>
           <div className="space-y-3">
@@ -248,7 +248,7 @@ export const SettingsPage: React.FC = () => {
                 type="checkbox"
                 checked={enableAutoRenewDefault}
                 onChange={(e) => setEnableAutoRenewDefault(e.target.checked)}
-                className="rounded text-[#714B67] focus:ring-[#714B67]"
+                className="rounded text-[#7A4C72] focus:ring-[#7A4C72]"
               />
               <span className="text-xs text-[#34313A]">
                 Default new subscriptions to automatic recurring renewal
@@ -259,7 +259,7 @@ export const SettingsPage: React.FC = () => {
                 type="checkbox"
                 checked={sendEmailOnInvoice}
                 onChange={(e) => setSendEmailOnInvoice(e.target.checked)}
-                className="rounded text-[#714B67] focus:ring-[#714B67]"
+                className="rounded text-[#7A4C72] focus:ring-[#7A4C72]"
               />
               <span className="text-xs text-[#34313A]">
                 Automatically dispatch GST tax invoice PDF to customer email on billing cycle trigger
@@ -270,7 +270,7 @@ export const SettingsPage: React.FC = () => {
                 type="checkbox"
                 checked={sendRenewalReminders}
                 onChange={(e) => setSendRenewalReminders(e.target.checked)}
-                className="rounded text-[#714B67] focus:ring-[#714B67]"
+                className="rounded text-[#7A4C72] focus:ring-[#7A4C72]"
               />
               <span className="text-xs text-[#34313A]">
                 Send automated renewal reminder notifications 3 days before renewal date
@@ -282,7 +282,7 @@ export const SettingsPage: React.FC = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white flex items-center gap-2 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
+            className="px-5 py-2.5 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white flex items-center gap-2 shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
           >
             <Save className="w-4 h-4" />
             <span>Save Configuration</span>

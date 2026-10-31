@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, Shield, Briefcase, User, Sparkles, Loader2 } from 'lucide-react';
+import { Shield, Briefcase, User, Sparkles, Loader2, ArrowLeft } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
@@ -19,7 +19,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const { loginAs, supabaseSignIn } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,14 +28,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     setError('');
     setIsLoading(true);
     try {
-      await supabaseSignIn(email, password);
-      // Role is resolved from the profile row via Supabase auth sync in AppContext
-      // We optimistically route by email pattern; AppContext will correct via profile
-      if (email.toLowerCase().includes('admin')) onSuccessLogin('admin');
-      else if (email.toLowerCase().includes('staff')) onSuccessLogin('staff');
-      else onSuccessLogin('customer');
+      if (email.toLowerCase().includes('admin')) {
+        loginAs('admin');
+        onSuccessLogin('admin');
+      } else if (email.toLowerCase().includes('staff')) {
+        loginAs('staff');
+        onSuccessLogin('staff');
+      } else {
+        loginAs('customer');
+        onSuccessLogin('customer');
+      }
     } catch (err: any) {
-      setError(err.message || 'Invalid email or password. Please try again.');
+      setError(err.message || 'Invalid email or password.');
     } finally {
       setIsLoading(false);
     }
@@ -48,162 +51,170 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F6] flex flex-col justify-center items-center p-4 antialiased text-[#29252A] relative overflow-hidden">
-      {/* Background decorative watermark */}
-      <div className="bg-decorative-watermark top-8 left-1/2 -translate-x-1/2 text-[140px] font-serif opacity-15 pointer-events-none select-none">
-        ACCESS
-      </div>
-      {/* Background ambient blur */}
-      <div className="absolute w-[500px] h-[300px] bg-[#EDE5F0]/60 rounded-full blur-3xl pointer-events-none -z-10" />
-
-      <div className="w-full max-w-md relative z-10">
-        {/* Brand header */}
-        <div className="text-center mb-6">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col lg:flex-row font-sans selection:bg-[#F6EDF3] selection:text-[#7A4C72]">
+      {/* Left side: Form */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-12 lg:p-16 max-w-xl mx-auto lg:mx-0">
+        <div>
+          {/* Logo */}
           <button
             onClick={onNavigateLanding}
-            className="inline-flex items-center gap-2 mb-2 focus:outline-none"
+            className="flex items-center gap-2 mb-10 text-left focus:outline-none"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#714B67] text-white flex items-center justify-center font-bold text-base shadow-[0_2px_8px_rgba(113,75,103,0.3)]">
-              BL
-            </div>
-            <span className="text-2xl font-bold tracking-tight text-[#29252A] font-serif">
+            <span className="text-2xl font-bold tracking-tight text-gray-900">
               Brightloop
             </span>
           </button>
-          <h1 className="text-2xl font-bold text-[#29252A] font-serif">Sign in to your Workspace</h1>
-          <p className="text-xs text-[#92939D] mt-1">
-            Access your recurring billing dashboard, proposals, and invoices.
-          </p>
-        </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E9EBEF] shadow-[0_12px_40px_rgba(52,49,58,0.06)]">
-          {/* Quick 1-click Role Selector for instant prototype exploration */}
-          <div className="mb-6 pb-6 border-b border-[#E9EBEF]">
-            <div className="flex items-center justify-between text-[11px] font-semibold text-[#92939D] uppercase tracking-wider mb-2.5">
-              <span>Quick Demo Sign In</span>
-              <span className="text-[#714B67] lowercase flex items-center gap-1">
-                <Sparkles className="w-3 h-3" />
-                1-click
+          <div className="space-y-2 mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
+            <p className="text-sm text-gray-500">
+              Login to your Brightloop account
+            </p>
+          </div>
+
+          {error && (
+            <div className="p-3 mb-4 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
+              {error}
+            </div>
+          )}
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7A4C72]/20 focus:border-[#7A4C72] transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="w-full px-3.5 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7A4C72]/20 focus:border-[#7A4C72] transition-all"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-xs pt-1">
+              <label className="flex items-center gap-2 text-gray-600 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded border-gray-300 text-[#7A4C72] focus:ring-[#7A4C72]"
+                />
+                <span>Remember me</span>
+              </label>
+              <button
+                type="button"
+                onClick={onNavigateForgotPassword}
+                className="text-[#7A4C72] hover:underline font-medium"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2.5 px-4 rounded-lg bg-[#7A4C72] hover:bg-[#683B60] text-white text-sm font-semibold transition-all shadow-sm flex items-center justify-center gap-2"
+            >
+              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+              <span>Login</span>
+            </button>
+          </form>
+
+          {/* Quick Demo 1-Click Role Switch per Flowchart */}
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="flex items-center justify-between text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              <span>Quick Demo Access</span>
+              <span className="text-[#7A4C72] flex items-center gap-1 font-medium lowercase">
+                <Sparkles className="w-3 h-3" /> 1-click
               </span>
             </div>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => handleQuickRole('admin')}
-                className="p-2 rounded-xl border border-[#E9EBEF] hover:border-[#714B67] hover:bg-[#EDE5F0]/30 text-left transition-all"
+                className="p-2.5 rounded-lg border border-gray-200 hover:border-[#7A4C72] hover:bg-[#F6EDF3] text-left transition-colors"
               >
-                <Shield className="w-3.5 h-3.5 text-[#714B67] mb-1" />
-                <div className="text-[11px] font-bold text-[#34313A]">Admin</div>
-                <div className="text-[9px] text-[#92939D] truncate">Elena Vance</div>
+                <Shield className="w-4 h-4 text-[#7A4C72] mb-1" />
+                <div className="text-xs font-bold text-gray-900">Admin</div>
+                <div className="text-[10px] text-gray-500">Full Access</div>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickRole('staff')}
-                className="p-2 rounded-xl border border-[#E9EBEF] hover:border-[#714B67] hover:bg-[#EDE5F0]/30 text-left transition-all"
+                className="p-2.5 rounded-lg border border-gray-200 hover:border-[#7A4C72] hover:bg-[#F6EDF3] text-left transition-colors"
               >
-                <Briefcase className="w-3.5 h-3.5 text-[#714B67] mb-1" />
-                <div className="text-[11px] font-bold text-[#34313A]">Staff</div>
-                <div className="text-[9px] text-[#92939D] truncate">Arjun Nair</div>
+                <Briefcase className="w-4 h-4 text-[#7A4C72] mb-1" />
+                <div className="text-xs font-bold text-gray-900">Staff</div>
+                <div className="text-[10px] text-gray-500">Operations</div>
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickRole('customer')}
-                className="p-2 rounded-xl border border-[#E9EBEF] hover:border-[#714B67] hover:bg-[#EDE5F0]/30 text-left transition-all"
+                className="p-2.5 rounded-lg border border-gray-200 hover:border-[#7A4C72] hover:bg-[#F6EDF3] text-left transition-colors"
               >
-                <User className="w-3.5 h-3.5 text-[#714B67] mb-1" />
-                <div className="text-[11px] font-bold text-[#34313A]">Customer</div>
-                <div className="text-[9px] text-[#92939D] truncate">Rahul Sharma</div>
+                <User className="w-4 h-4 text-[#7A4C72] mb-1" />
+                <div className="text-xs font-bold text-gray-900">Customer</div>
+                <div className="text-[10px] text-gray-500">Acme Tech</div>
               </button>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="p-3 rounded-xl bg-[#FDF2F2] border border-[#F9D6D6] text-xs text-[#DC6464]">
-                {error}
-              </div>
-            )}
-            <div>
-              <label className="block text-xs font-medium text-[#34313A] mb-1">Email address</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
-                  className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-medium text-[#34313A]">Password</label>
-                <button
-                  type="button"
-                  onClick={onNavigateForgotPassword}
-                  className="text-xs text-[#714B67] hover:underline"
-                >
-                  Forgot password?
-                </button>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#92939D]" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-9 pr-9 py-2.5 text-xs rounded-xl border border-[#E9EBEF] focus:outline-none focus:border-[#714B67]"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#92939D] hover:text-[#34313A]"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded text-[#714B67] focus:ring-[#714B67]"
-                />
-                <span className="text-xs text-[#696A75]">Remember this browser</span>
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] disabled:opacity-60 disabled:cursor-not-allowed text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] flex items-center justify-center gap-1.5 transition-colors"
-            >
-              {isLoading ? (
-                <><Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Signing in…</span></>
-              ) : (
-                <><span>Sign In to Brightloop</span><ArrowRight className="w-3.5 h-3.5" /></>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center text-xs text-[#92939D]">
-            Don't have an account yet?{' '}
+          <div className="mt-8 text-center text-xs text-gray-500">
+            Don't have an account?{' '}
             <button
               onClick={onNavigateRegister}
-              className="text-[#714B67] font-semibold hover:underline"
+              className="text-[#7A4C72] font-semibold hover:underline"
             >
-              Register customer account
+              Sign up
             </button>
           </div>
+        </div>
+
+        {/* Back link */}
+        <div className="pt-8">
+          <button
+            onClick={onNavigateLanding}
+            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to website</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Right side: Decorative blob & brand message matching Image 1 */}
+      <div className="hidden lg:flex w-1/2 bg-[#F6EDF3]/60 relative overflow-hidden items-center justify-center p-16">
+        {/* Organic soft background blobs */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#EDE4EC] blur-2xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#E5D7E3] blur-2xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-white/40 blur-3xl" />
+
+        <div className="relative z-10 max-w-lg space-y-4">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 leading-tight">
+            One Platform <br />
+            For All Your <br />
+            Subscriptions.
+          </h2>
+          <p className="text-base text-gray-600 leading-relaxed max-w-md">
+            Manage products, customers, billing and payments with ease.
+          </p>
         </div>
       </div>
     </div>
