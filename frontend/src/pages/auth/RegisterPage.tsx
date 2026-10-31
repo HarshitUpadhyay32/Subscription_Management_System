@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, User, Building2, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, Building2, ArrowRight, Loader2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
@@ -14,23 +14,41 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   onNavigateLogin,
   onSuccessRegister,
 }) => {
-  const { registerAccount } = useApp();
+  const { supabaseSignUp } = useApp();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
       return;
     }
-    registerAccount(name, email, company);
-    onSuccessRegister('customer');
+    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+      setError('Password must include uppercase, lowercase, and a special character.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await supabaseSignUp(email, password, name, company || undefined);
+      onSuccessRegister('customer');
+    } catch (err: any) {
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -143,10 +161,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
 
             <button
               type="submit"
-              className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] flex items-center justify-center gap-1.5 transition-colors"
+              disabled={isLoading}
+              className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] disabled:opacity-60 disabled:cursor-not-allowed text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] flex items-center justify-center gap-1.5 transition-colors"
             >
-              <span>Create Account</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              {isLoading ? (
+                <><Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Creating account…</span></>
+              ) : (
+                <><span>Create Account</span><ArrowRight className="w-3.5 h-3.5" /></>
+              )}
             </button>
           </form>
 

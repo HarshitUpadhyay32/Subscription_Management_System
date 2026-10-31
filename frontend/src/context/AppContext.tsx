@@ -27,6 +27,7 @@ import {
   UserProfile,
   UserRole,
 } from '../types';
+import { useSupabaseAuth } from '../lib/useSupabaseAuth';
 
 export interface ToastItem {
   id: string;
@@ -43,6 +44,13 @@ interface AppContextType {
   loginWithCredentials: (email: string, pass: string) => boolean;
   registerAccount: (name: string, email: string, company?: string) => boolean;
   logout: () => void;
+
+  // Supabase real auth (async)
+  supabaseLoading: boolean;
+  supabaseSignIn: (email: string, password: string) => Promise<void>;
+  supabaseSignUp: (email: string, password: string, name: string, company?: string) => Promise<void>;
+  supabaseSignOut: () => Promise<void>;
+  supabaseResetPassword: (email: string) => Promise<void>;
 
   // Products & Plans
   products: Product[];
@@ -153,6 +161,79 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
   });
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  // ─── Supabase Auth ────────────────────────────────────────────────────────
+  const supabaseAuth = useSupabaseAuth();
+
+  // Sync Supabase session → currentUser (real login / logout)
+  useEffect(() => {
+    if (supabaseAuth.loading) return;
+    if (supabaseAuth.user) {
+      // Fetch the profile row to get the role
+      supabaseAuth.getProfile(supabaseAuth.user.id)
+        .then((profile) => {
+          setCurrentUser({
+            id: profile.id,
+            name: profile.full_name || supabaseAuth.user!.email!.split('@')[0],
+            email: profile.email || supabaseAuth.user!.email || '',
+            role: (profile.role as UserRole) || 'customer',
+          });
+        })
+        .catch(() => {
+          // Profile not yet synced (new user before trigger fires); keep demo user
+        });
+    }
+    // If no supabase session, keep existing demo user (so demo mode still works)
+  }, [supabaseAuth.user, supabaseAuth.loading]);
+
+  // ─── Real Supabase auth methods ───────────────────────────────────────────
+  const supabaseSignIn = async (email: string, password: string) => {
+    try {
+      await supabaseAuth.signIn(email, password);
+      showToast({ type: 'success', title: 'Signed in', message: 'Welcome back to Brightloop!' });
+    } catch (err: any) {
+      showToast({ type: 'error', title: 'Sign in failed', message: err.message });
+      throw err;
+    }
+  };
+
+  const supabaseSignUp = async (email: string, password: string, name: string, company?: string) => {
+    try {
+      await supabaseAuth.signUp(email, password, { full_name: name, company });
+      showToast({
+        type: 'success',
+        title: 'Account created',
+        message: 'Welcome to Brightloop! Check your email to confirm your account.',
+      });
+    } catch (err: any) {
+      showToast({ type: 'error', title: 'Registration failed', message: err.message });
+      throw err;
+    }
+  };
+
+  const supabaseSignOut = async () => {
+    try {
+      await supabaseAuth.signOut();
+      setCurrentUser(null);
+      showToast({ type: 'info', message: 'You have been signed out.' });
+    } catch (err: any) {
+      showToast({ type: 'error', title: 'Sign out failed', message: err.message });
+    }
+  };
+
+  const supabaseResetPassword = async (email: string) => {
+    try {
+      await supabaseAuth.sendPasswordReset(email);
+      showToast({
+        type: 'success',
+        title: 'Reset email sent',
+        message: `Password reset instructions sent to ${email}`,
+      });
+    } catch (err: any) {
+      showToast({ type: 'error', title: 'Reset failed', message: err.message });
+      throw err;
+    }
+  };
 
   // LocalStorage sync
   useEffect(() => {
@@ -724,6 +805,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loginWithCredentials,
         registerAccount,
         logout,
+        // Supabase real auth
+        supabaseLoading: supabaseAuth.loading,
+        supabaseSignIn,
+        supabaseSignUp,
+        supabaseSignOut,
+        supabaseResetPassword,
         products,
         addProduct,
         updateProduct,

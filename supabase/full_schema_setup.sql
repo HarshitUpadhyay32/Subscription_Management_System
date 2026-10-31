@@ -147,6 +147,26 @@ CREATE TABLE IF NOT EXISTS public.payments (
     notes TEXT
 );
 
+-- 10b. Quotations Table
+CREATE TABLE IF NOT EXISTS public.quotations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    quotation_number TEXT UNIQUE NOT NULL,
+    customer_id UUID REFERENCES public.customers(id) ON DELETE RESTRICT,
+    issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    expiry_date DATE,
+    items JSONB DEFAULT '[]'::jsonb,
+    subtotal NUMERIC(12, 2) NOT NULL DEFAULT 0,
+    discount_percentage NUMERIC(5, 2) DEFAULT 0,
+    discount_amount NUMERIC(12, 2) DEFAULT 0,
+    tax_percentage NUMERIC(5, 2) DEFAULT 18,
+    tax_amount NUMERIC(12, 2) DEFAULT 0,
+    total_amount NUMERIC(12, 2) NOT NULL DEFAULT 0,
+    status TEXT CHECK (status IN ('draft', 'sent', 'approved', 'converted', 'expired')) DEFAULT 'draft',
+    notes TEXT,
+    converted_subscription_id UUID REFERENCES public.subscriptions(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- 11. Taxes Table
 CREATE TABLE IF NOT EXISTS public.taxes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

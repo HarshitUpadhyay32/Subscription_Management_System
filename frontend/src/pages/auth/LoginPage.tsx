@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, Shield, Briefcase, User, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ArrowRight, Shield, Briefcase, User, Sparkles, Loader2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
@@ -16,18 +16,30 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   onNavigateForgotPassword,
   onSuccessLogin,
 }) => {
-  const { loginWithCredentials, loginAs } = useApp();
-  const [email, setEmail] = useState('rahul.sharma@sharmalogistics.in');
-  const [password, setPassword] = useState('••••••••');
+  const { loginAs, supabaseSignIn } = useApp();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    loginWithCredentials(email, password);
-    if (email.includes('admin')) onSuccessLogin('admin');
-    else if (email.includes('staff')) onSuccessLogin('staff');
-    else onSuccessLogin('customer');
+    setError('');
+    setIsLoading(true);
+    try {
+      await supabaseSignIn(email, password);
+      // Role is resolved from the profile row via Supabase auth sync in AppContext
+      // We optimistically route by email pattern; AppContext will correct via profile
+      if (email.toLowerCase().includes('admin')) onSuccessLogin('admin');
+      else if (email.toLowerCase().includes('staff')) onSuccessLogin('staff');
+      else onSuccessLogin('customer');
+    } catch (err: any) {
+      setError(err.message || 'Invalid email or password. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleQuickRole = (role: UserRole) => {
@@ -107,6 +119,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="p-3 rounded-xl bg-[#FDF2F2] border border-[#F9D6D6] text-xs text-[#DC6464]">
+                {error}
+              </div>
+            )}
             <div>
               <label className="block text-xs font-medium text-[#34313A] mb-1">Email address</label>
               <div className="relative">
@@ -167,10 +184,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
             <button
               type="submit"
-              className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] flex items-center justify-center gap-1.5 transition-colors"
+              disabled={isLoading}
+              className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#714B67] hover:bg-[#603D56] disabled:opacity-60 disabled:cursor-not-allowed text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] flex items-center justify-center gap-1.5 transition-colors"
             >
-              <span>Sign In to Brightloop</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              {isLoading ? (
+                <><Loader2 className="w-3.5 h-3.5 animate-spin" /><span>Signing in…</span></>
+              ) : (
+                <><span>Sign In to Brightloop</span><ArrowRight className="w-3.5 h-3.5" /></>
+              )}
             </button>
           </form>
 
