@@ -1,270 +1,198 @@
+# Brightloop — Subscription Management System
 
-# Subscription Management System
+> **From customer registration to recurring revenue — everything managed in one place.**
 
-A centralized platform to manage products, subscription plans, recurring billing, invoices, payments, discounts, and revenue analytics.
+Brightloop is a subscription management platform designed to help businesses manage products, subscription plans, customers, quotations, subscriptions, invoices, payments, discounts, and revenue reporting from one place.
 
-Built to simplify the complete subscription lifecycle for businesses through a unified management system.
+This repository is being developed as a hackathon MVP. The goal is to demonstrate a complete subscription-to-payment workflow with role-based access.
 
 ---
 
-## About the Project
+## Table of Contents
 
-The **Subscription Management System** is designed to help businesses manage their subscription-based operations from a single platform.
+- [1. Problem Statement](#1-problem-statement)
+- [2. Project Goals](#2-project-goals)
+- [3. Core Features](#3-core-features)
+- [4. User Roles](#4-user-roles)
+- [5. Main User Flow](#5-main-user-flow)
+- [6. Subscription and Billing Pipeline](#6-subscription-and-billing-pipeline)
+- [7. Technology Stack](#7-technology-stack)
+- [8. System Architecture](#8-system-architecture)
+- [9. Project Structure](#9-project-structure)
+- [10. Database Design](#10-database-design)
+- [11. API Contract](#11-api-contract)
+- [12. Local Development Setup](#12-local-development-setup)
+- [13. Environment Variables](#13-environment-variables)
+- [14. Security](#14-security)
+- [15. Demo Walkthrough](#15-demo-walkthrough)
+- [16. MVP Scope and Future Improvements](#16-mvp-scope-and-future-improvements)
+- [17. Team Responsibilities](#17-team-responsibilities)
+- [18. Contributing](#18-contributing)
 
-The project is based on the Brightloop Software business scenario, where customers purchase monthly or yearly subscriptions, businesses manage products and plans, and finance teams handle recurring invoices and payments.
+---
 
-The system aims to replace manual spreadsheets, invoice creation, renewal tracking, and financial reporting with an integrated software solution.
+## 1. Problem Statement
 
-## Key Features
+Subscription-based businesses often manage customers and plans in spreadsheets, remember renewals manually, create invoices one by one, and reconcile payments separately.
 
-### 1. Authentication & User Management
-- Customer registration and login.
-- Role-based access control.
-- Admin, Staff, and Customer roles.
-- Secure password hashing.
-- Password reset functionality.
-- Admin-controlled staff creation.
+This can lead to:
+- Missed subscription renewals.
+- Incorrect invoices.
+- Payment tracking problems.
+- Difficulty understanding recurring revenue.
+- Increased manual work.
 
-### 2. Product & Plan Management
-- Create, update, and manage products.
-- Product variants with additional pricing.
+Brightloop aims to bring these operations into one platform and make the complete subscription lifecycle easier to manage.
+
+## 2. Project Goals
+
+- Centralize products, plans, customers, and subscriptions.
+- Manage subscription states and billing periods.
+- Generate invoices from subscriptions.
+- Calculate applicable taxes and discounts.
+- Record payments against invoices.
+- Track outstanding balances and overdue invoices.
+- Provide separate experiences for Admin, Staff, and Customers.
+- Show business metrics such as active subscriptions and collected revenue.
+
+## 3. Core Features
+
+### Authentication and Access Control
+
+- Email and password registration and login through Supabase Auth.
+- Password reset through Supabase Auth.
+- Role-based navigation for Admin, Staff, and Customer.
+- Customer-specific data access.
+- Secure authentication and authorization.
+
+### Product and Plan Management
+
+- Create and manage products.
+- Store product name, type, sales price, cost price, and notes.
+- Support product variants and price adjustments.
 - Create subscription plans.
-- Daily, weekly, monthly, and yearly billing cycles.
-- Minimum quantity and plan availability settings.
-- Pause, renew, and close subscription plans.
+- Configure pricing and billing frequency.
+- Support daily, weekly, monthly, and yearly billing cycles.
+- Configure minimum quantities and plan availability dates.
 
-### 3. Quotation & Subscription Management
-- Reusable quotation templates.
-- Generate quotations for customers.
-- Convert quotations into subscriptions.
-- Automatic subscription numbering.
-- Subscription start and expiry dates.
-- Subscription lifecycle tracking.
+### Customer and Quotation Management
 
-### 4. Recurring Billing & Invoices
-- Automatic invoice generation.
-- Invoice creation from subscriptions.
-- Automatic tax calculations.
-- Invoice confirmation and cancellation.
-- Invoice sending and printing.
-- Prevention of duplicate billing.
+- Maintain customer profiles.
+- View customer subscription history.
+- Prepare quotations using selected products and plans.
+- Define quotation validity periods.
+- Convert accepted quotations into subscriptions.
 
-### 5. Discount Management
-- Fixed amount discounts.
-- Percentage-based discounts.
-- Minimum purchase requirements.
-- Product-specific discounts.
-- Subscription-wide discounts.
-- Discount validity and usage limits.
+### Subscription Management
 
-### 6. Payment Management
-- Record customer payments.
-- Multiple payment methods.
-- Payment date and amount tracking.
-- Invoice-payment association.
-- Outstanding and overdue invoice tracking.
+- Create subscriptions linked to customers and plans.
+- Track start dates and expiry dates.
+- Manage subscription items and quantities.
+- Support Draft, Quotation, Confirmed, Active, Paused, and Closed states.
+- Allow pause, resume, close, or renewal according to plan rules.
 
-### 7. Finance Dashboard
-- Active subscription overview.
-- Revenue summaries.
-- Total payments received.
-- Outstanding amounts.
-- Overdue invoice reports.
-- Filtering and financial summaries.
+### Invoice and Billing Management
+
+- Generate invoices from subscription details.
+- Calculate subtotal, discounts, taxes, and final amounts.
+- Generate unique invoice numbers.
+- Track invoice issue dates and due dates.
+- Prevent duplicate invoice generation for the same billing period.
+- Support invoice confirmation and cancellation.
+
+### Discounts and Payments
+
+- Support fixed-amount and percentage discounts.
+- Configure eligibility conditions and usage limits.
+- Apply discounts automatically when eligible.
+- Record payments against invoices.
+- Store payment method, amount, date, and notes.
+- Track paid amounts and outstanding balances.
+- Mark invoices as Paid when fully paid.
+
+### Dashboard and Analytics
+
+- Display active subscription count.
+- Display collected revenue.
+- Display outstanding balances.
+- Identify overdue invoices.
+- Show revenue trends.
+- Display subscription summaries.
+- Provide date-based reporting where supported.
 
 ---
 
-## Technology Stack
+## 4. User Roles
 
-| Component | Technology |
+| Role | Main Permissions |
 |---|---|
-| Frontend | Next.js |
-| Language | TypeScript |
-| UI Styling | Tailwind CSS |
-| Backend | Node.js + Express.js |
-| Database | PostgreSQL |
-| ORM | Prisma |
-| Authentication | JWT + bcrypt |
-| API Documentation | Swagger |
-| Version Control | Git & GitHub |
+| Admin | Full business access, products, plans, customers, subscriptions, invoices, payments, discounts, taxes, reports, and staff management. |
+| Staff | Day-to-day customer operations, quotations, subscriptions, invoices, and payment records. |
+| Customer | Access their own profile, subscriptions, invoices, and payment history. |
 
-*The technology stack represents the proposed development architecture.*
+### Admin
+
+- Manage products and plans.
+- Manage customers.
+- Create and manage subscriptions.
+- Manage quotations.
+- Generate and manage invoices.
+- View and record payments.
+- Configure taxes and discounts.
+- View analytics and reports.
+- Add and manage staff members.
+
+### Staff
+
+- View customers.
+- Create quotations.
+- Create subscriptions.
+- Manage permitted subscription operations.
+- Generate invoices.
+- Record payments.
+- Track overdue invoices.
+
+Staff members cannot create other staff accounts or modify admin-only configurations.
+
+### Customer
+
+- Register and log in.
+- View profile information.
+- View available plans.
+- View their own subscriptions.
+- Check subscription status and renewal information.
+- View their own invoices.
+- View payment history.
+- Manage permitted account settings.
+
+Customers must never be able to access another customer's information.
 
 ---
 
-## Project Architecture
+## 5. Main User Flow
+
+### Overall Entry Flow
 
 ```text
-Subscription-Management-System/
-│
-├── frontend/
-│   ├── public/
-│   └── src/
-│       ├── app/
-│       ├── components/
-│       ├── hooks/
-│       ├── services/
-│       ├── types/
-│       └── utils/
-│
-├── backend/
-│   ├── prisma/
-│   │   └── schema.prisma
-│   │
-│   └── src/
-│       ├── config/
-│       ├── controllers/
-│       ├── middleware/
-│       ├── routes/
-│       ├── services/
-│       ├── utils/
-│       └── app.ts
-│
-├── docs/
-│   ├── database-design.md
-│   ├── api-documentation.md
-│   └── project-architecture.md
-│
-├── .gitignore
-└── README.md
-```
-
----
-
-## Team & Responsibilities
-
-The project is being developed by a team of four developers.
-
-| Developer | Module | Responsibilities |
-|---|---|---|
-| Developer 1 | Authentication & Customer Portal | User management, authentication, authorization, customer dashboard |
-| Developer 2 | Products & Plans | Product management, variants, plans, taxes, discounts |
-| Developer 3 | Subscriptions & Billing | Quotations, subscription lifecycle, recurring billing |
-| Developer 4 | Invoices & Finance | Invoice management, payments, finance dashboard, testing |
-
-Each developer is responsible for implementing, testing, and integrating their assigned module.
-
----
-
-## Development Roadmap
-
-- [ ] Project initialization and architecture.
-- [ ] Database schema and relationships.
-- [ ] Authentication and role management.
-- [ ] Product and variant management.
-- [ ] Subscription plan management.
-- [ ] Tax and discount management.
-- [ ] Quotation management.
-- [ ] Subscription lifecycle management.
-- [ ] Recurring billing automation.
-- [ ] Invoice management.
-- [ ] Payment management.
-- [ ] Finance dashboard and reporting.
-- [ ] Module integration.
-- [ ] End-to-end testing.
-- [ ] Performance optimization.
-- [ ] Production deployment.
-
----
-
-## Performance Requirements
-
-The system is designed with scalability in mind.
-
-- Target response time: Under 2 seconds per page.
-- Support thousands of subscription records.
-- Server-side pagination and filtering.
-- Efficient database queries.
-- Prevention of duplicate recurring invoices.
-- Secure role-based access to business data.
-
-Performance targets will be validated through testing.
-
----
-
-## Getting Started
-
-### Prerequisites
-
-Install the following:
-
-- Node.js (LTS)
-- PostgreSQL
-- npm
-- Git
-
-### Clone Repository
-
-```bash
-git clone https://github.com/YOUR-USERNAME/Subscription_Management_System.git
-
-cd Subscription_Management_System
-```
-
-### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Backend Setup
-
-Open another terminal:
-
-```bash
-cd backend
-npm install
-```
-
-Create a `.env` file:
-
-```env
-PORT=5000
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/subscription_db"
-JWT_SECRET="your-secret-key"
-```
-
-Then run:
-
-```bash
-npx prisma generate
-npx prisma migrate dev
-npm run dev
-```
-
-*Note: These commands describe the planned setup. They will work once the corresponding application files, scripts and Prisma schema have been implemented.*
-
----
-
-## Future Enhancements
-
-- Payment gateway integration.
-- Automated email notifications.
-- Advanced financial analytics.
-- Subscription usage tracking.
-- Automated renewal reminders.
-- Exportable financial reports.
-
----
-
-## Project Objective
-
-To develop a reliable, scalable, and user-friendly subscription management platform that automates business operations, simplifies recurring billing, and provides real-time financial visibility.
-
----
-
-## Contributors
-
-Developed collaboratively by a team of four developers.
-
-**Project:** Subscription Management System  
-**Domain:** Full-Stack Web Development  
-**Repository:** GitHub
-
----
-
-## License
-
-This project is developed for educational and project-development purposes.
+Open Website
+     |
+     v
+Landing Page
+     |
+     v
+Sign Up / Login
+     |
+     v
+Authentication
+     |
+     v
+Identify User Role
+     |
+     +-------------------+
+     |         |         |
+     v         v         v
+   Admin     Staff    Customer
+     |         |         |
+     v         v         v
+  Admin     Staff    Customer
+Dashboard  Dashboard   Portal
