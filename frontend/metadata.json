@@ -1,0 +1,6 @@
+{
+  "name": "Brightloop - Subscription Management System",
+  "description": "A soft, minimal, modern subscription management platform designed for businesses to manage plans, customers, quotations, subscriptions, recurring invoices, and analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 jobs:
   backend-test:
@@ -32,7 +32,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Verify package configuration
+      - name: Install & Build
         run: |
           cd frontend
-          npm pkg get name
+          npm install
+          npm run build
