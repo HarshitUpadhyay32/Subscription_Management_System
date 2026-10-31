@@ -266,13 +266,13 @@ CREATE POLICY "Admin manage profiles"
 
 -- Products & Plans
 DROP POLICY IF EXISTS "Public read products" ON public.products;
-CREATE POLICY "Public read products" ON public.products FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Public read products" ON public.products FOR SELECT TO anon, authenticated USING (true);
 
 DROP POLICY IF EXISTS "Admin manage products" ON public.products;
 CREATE POLICY "Admin manage products" ON public.products FOR ALL USING (public.get_current_role() = 'admin');
 
 DROP POLICY IF EXISTS "Public read plans" ON public.plans;
-CREATE POLICY "Public read plans" ON public.plans FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Public read plans" ON public.plans FOR SELECT TO anon, authenticated USING (true);
 
 DROP POLICY IF EXISTS "Admin manage plans" ON public.plans;
 CREATE POLICY "Admin manage plans" ON public.plans FOR ALL USING (public.get_current_role() = 'admin');
