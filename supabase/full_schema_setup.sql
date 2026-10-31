@@ -1,6 +1,6 @@
 -- ====================================================================
 -- BRIGHTLOOP SUBSCRIPTION MANAGEMENT SYSTEM
--- Complete Consolidated Database Setup Script for Supabase SQL Editor
+-- Fully Idempotent Setup Script for Supabase SQL Editor
 -- Project: https://ixcsplwnrwqbylivxkeq.supabase.co
 -- ====================================================================
 
@@ -158,9 +158,10 @@ CREATE TABLE IF NOT EXISTS public.taxes (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 12. System Settings Table
-CREATE TABLE IF NOT EXISTS public.system_settings (
-    id INT PRIMARY KEY DEFAULT 1,
+-- 12. System Settings Table (Clean recreation with UUID to prevent type conflicts)
+DROP TABLE IF EXISTS public.system_settings CASCADE;
+CREATE TABLE public.system_settings (
+    id UUID PRIMARY KEY DEFAULT '00000000-0000-0000-0000-000000000001'::uuid,
     company_name TEXT NOT NULL DEFAULT 'Brightloop Technologies India Pvt Ltd',
     legal_entity TEXT DEFAULT 'Brightloop SaaS Billing Platform',
     gstin TEXT DEFAULT '27AAGCB9210P1ZG',
@@ -179,8 +180,7 @@ CREATE TABLE IF NOT EXISTS public.system_settings (
     enable_auto_renew_default BOOLEAN DEFAULT TRUE,
     send_email_on_invoice BOOLEAN DEFAULT TRUE,
     send_renewal_reminders BOOLEAN DEFAULT TRUE,
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT single_row_check CHECK (id = 1)
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Indexes for performance
@@ -254,45 +254,64 @@ RETURNS TEXT AS $$
 $$ LANGUAGE sql STABLE SECURITY DEFINER;
 
 -- Profiles Policies
+DROP POLICY IF EXISTS "Users view own profile or admin/staff view all" ON public.profiles;
 CREATE POLICY "Users view own profile or admin/staff view all"
     ON public.profiles FOR SELECT
     USING (id = auth.uid() OR public.get_current_role() IN ('admin', 'staff'));
 
+DROP POLICY IF EXISTS "Admin manage profiles" ON public.profiles;
 CREATE POLICY "Admin manage profiles"
     ON public.profiles FOR ALL
     USING (public.get_current_role() = 'admin');
 
 -- Products & Plans
+DROP POLICY IF EXISTS "Public read products" ON public.products;
 CREATE POLICY "Public read products" ON public.products FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Admin manage products" ON public.products;
 CREATE POLICY "Admin manage products" ON public.products FOR ALL USING (public.get_current_role() = 'admin');
+
+DROP POLICY IF EXISTS "Public read plans" ON public.plans;
 CREATE POLICY "Public read plans" ON public.plans FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Admin manage plans" ON public.plans;
 CREATE POLICY "Admin manage plans" ON public.plans FOR ALL USING (public.get_current_role() = 'admin');
 
 -- Customers
+DROP POLICY IF EXISTS "Customers view own profile" ON public.customers;
 CREATE POLICY "Customers view own profile" ON public.customers FOR SELECT
     USING (profile_id = auth.uid() OR public.get_current_role() IN ('admin', 'staff'));
+
+DROP POLICY IF EXISTS "Staff and Admin manage customers" ON public.customers;
 CREATE POLICY "Staff and Admin manage customers" ON public.customers FOR ALL
     USING (public.get_current_role() IN ('admin', 'staff'));
 
 -- Subscriptions
+DROP POLICY IF EXISTS "Customer view own subscriptions" ON public.subscriptions;
 CREATE POLICY "Customer view own subscriptions" ON public.subscriptions FOR SELECT
     USING (
         customer_id IN (SELECT id FROM public.customers WHERE profile_id = auth.uid())
         OR public.get_current_role() IN ('admin', 'staff')
     );
+
+DROP POLICY IF EXISTS "Staff and Admin manage subscriptions" ON public.subscriptions;
 CREATE POLICY "Staff and Admin manage subscriptions" ON public.subscriptions FOR ALL
     USING (public.get_current_role() IN ('admin', 'staff'));
 
 -- Invoices
+DROP POLICY IF EXISTS "Customer view own invoices" ON public.invoices;
 CREATE POLICY "Customer view own invoices" ON public.invoices FOR SELECT
     USING (
         customer_id IN (SELECT id FROM public.customers WHERE profile_id = auth.uid())
         OR public.get_current_role() IN ('admin', 'staff')
     );
+
+DROP POLICY IF EXISTS "Staff and Admin manage invoices" ON public.invoices;
 CREATE POLICY "Staff and Admin manage invoices" ON public.invoices FOR ALL
     USING (public.get_current_role() IN ('admin', 'staff'));
 
 -- Payments
+DROP POLICY IF EXISTS "Customer view payments for their invoices" ON public.payments;
 CREATE POLICY "Customer view payments for their invoices" ON public.payments FOR SELECT
     USING (
         invoice_id IN (
@@ -301,20 +320,31 @@ CREATE POLICY "Customer view payments for their invoices" ON public.payments FOR
         )
         OR public.get_current_role() IN ('admin', 'staff')
     );
+
+DROP POLICY IF EXISTS "Staff and Admin record payments" ON public.payments;
 CREATE POLICY "Staff and Admin record payments" ON public.payments FOR ALL
     USING (public.get_current_role() IN ('admin', 'staff'));
 
 -- Taxes & Settings
+DROP POLICY IF EXISTS "Anyone authenticated can view taxes" ON public.taxes;
 CREATE POLICY "Anyone authenticated can view taxes" ON public.taxes FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Admin manage taxes" ON public.taxes;
 CREATE POLICY "Admin manage taxes" ON public.taxes FOR ALL USING (public.get_current_role() = 'admin');
+
+DROP POLICY IF EXISTS "Anyone authenticated can view settings" ON public.system_settings;
 CREATE POLICY "Anyone authenticated can view settings" ON public.system_settings FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Admin manage settings" ON public.system_settings;
 CREATE POLICY "Admin manage settings" ON public.system_settings FOR ALL USING (public.get_current_role() = 'admin');
 
 -- ====================================================================
 -- 4. SEED DATA
 -- ====================================================================
 
-INSERT INTO public.system_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.system_settings (id)
+VALUES ('00000000-0000-0000-0000-000000000001'::uuid)
+ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.products (id, name, type, sales_price, cost_price, description, variants)
 VALUES

@@ -12,9 +12,10 @@ CREATE TABLE IF NOT EXISTS public.taxes (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. System Settings Table (Singleton pattern)
-CREATE TABLE IF NOT EXISTS public.system_settings (
-    id INT PRIMARY KEY DEFAULT 1,
+-- 2. System Settings Table
+DROP TABLE IF EXISTS public.system_settings CASCADE;
+CREATE TABLE public.system_settings (
+    id UUID PRIMARY KEY DEFAULT '00000000-0000-0000-0000-000000000001'::uuid,
     company_name TEXT NOT NULL DEFAULT 'Brightloop Technologies India Pvt Ltd',
     legal_entity TEXT DEFAULT 'Brightloop SaaS Billing Platform',
     gstin TEXT DEFAULT '27AAGCB9210P1ZG',
@@ -33,35 +34,38 @@ CREATE TABLE IF NOT EXISTS public.system_settings (
     enable_auto_renew_default BOOLEAN DEFAULT TRUE,
     send_email_on_invoice BOOLEAN DEFAULT TRUE,
     send_renewal_reminders BOOLEAN DEFAULT TRUE,
-    updated_at TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT single_row_check CHECK (id = 1)
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Enable RLS
 ALTER TABLE public.taxes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone authenticated can view taxes" ON public.taxes;
 CREATE POLICY "Anyone authenticated can view taxes"
     ON public.taxes FOR SELECT
     TO authenticated
     USING (true);
 
+DROP POLICY IF EXISTS "Admin can manage taxes" ON public.taxes;
 CREATE POLICY "Admin can manage taxes"
     ON public.taxes FOR ALL
     USING (public.get_current_role() = 'admin');
 
+DROP POLICY IF EXISTS "Anyone authenticated can view settings" ON public.system_settings;
 CREATE POLICY "Anyone authenticated can view settings"
     ON public.system_settings FOR SELECT
     TO authenticated
     USING (true);
 
+DROP POLICY IF EXISTS "Admin can manage settings" ON public.system_settings;
 CREATE POLICY "Admin can manage settings"
     ON public.system_settings FOR ALL
     USING (public.get_current_role() = 'admin');
 
 -- Seed initial settings row
 INSERT INTO public.system_settings (id)
-VALUES (1)
+VALUES ('00000000-0000-0000-0000-000000000001'::uuid)
 ON CONFLICT (id) DO NOTHING;
 
 -- Seed initial taxes
