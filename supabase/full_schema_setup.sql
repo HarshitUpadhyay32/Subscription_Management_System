@@ -298,6 +298,21 @@ DROP POLICY IF EXISTS "Staff and Admin manage subscriptions" ON public.subscript
 CREATE POLICY "Staff and Admin manage subscriptions" ON public.subscriptions FOR ALL
     USING (public.get_current_role() IN ('admin', 'staff'));
 
+-- Subscription Items
+DROP POLICY IF EXISTS "Customer view own subscription items" ON public.subscription_items;
+CREATE POLICY "Customer view own subscription items" ON public.subscription_items FOR SELECT
+    USING (
+        subscription_id IN (
+            SELECT id FROM public.subscriptions 
+            WHERE customer_id IN (SELECT id FROM public.customers WHERE profile_id = auth.uid())
+        )
+        OR public.get_current_role() IN ('admin', 'staff')
+    );
+
+DROP POLICY IF EXISTS "Staff and Admin manage subscription items" ON public.subscription_items;
+CREATE POLICY "Staff and Admin manage subscription items" ON public.subscription_items FOR ALL
+    USING (public.get_current_role() IN ('admin', 'staff'));
+
 -- Invoices
 DROP POLICY IF EXISTS "Customer view own invoices" ON public.invoices;
 CREATE POLICY "Customer view own invoices" ON public.invoices FOR SELECT
@@ -309,6 +324,29 @@ CREATE POLICY "Customer view own invoices" ON public.invoices FOR SELECT
 DROP POLICY IF EXISTS "Staff and Admin manage invoices" ON public.invoices;
 CREATE POLICY "Staff and Admin manage invoices" ON public.invoices FOR ALL
     USING (public.get_current_role() IN ('admin', 'staff'));
+
+-- Invoice Items
+DROP POLICY IF EXISTS "Customer view own invoice items" ON public.invoice_items;
+CREATE POLICY "Customer view own invoice items" ON public.invoice_items FOR SELECT
+    USING (
+        invoice_id IN (
+            SELECT id FROM public.invoices 
+            WHERE customer_id IN (SELECT id FROM public.customers WHERE profile_id = auth.uid())
+        )
+        OR public.get_current_role() IN ('admin', 'staff')
+    );
+
+DROP POLICY IF EXISTS "Staff and Admin manage invoice items" ON public.invoice_items;
+CREATE POLICY "Staff and Admin manage invoice items" ON public.invoice_items FOR ALL
+    USING (public.get_current_role() IN ('admin', 'staff'));
+
+-- Discounts
+DROP POLICY IF EXISTS "Public read discounts" ON public.discounts;
+CREATE POLICY "Public read discounts" ON public.discounts FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Admin manage discounts" ON public.discounts;
+CREATE POLICY "Admin manage discounts" ON public.discounts FOR ALL
+    USING (public.get_current_role() = 'admin');
 
 -- Payments
 DROP POLICY IF EXISTS "Customer view payments for their invoices" ON public.payments;
