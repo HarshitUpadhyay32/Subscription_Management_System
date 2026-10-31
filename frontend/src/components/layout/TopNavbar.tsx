@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
+  Home,
   Search,
   Bell,
   ChevronDown,
@@ -77,15 +78,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <div className="flex items-center gap-3">
         <button
           onClick={onToggleMobileMenu}
-          className="md:hidden p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+          className="md:hidden p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           aria-label="Toggle navigation"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <button
-          onClick={() => onNavigate('overview')}
-          className="flex items-center gap-2 text-left focus:outline-none hover:opacity-90 transition-opacity"
+          onClick={onNavigateLanding}
+          className="flex items-center gap-2 text-left focus:outline-none hover:opacity-90 transition-opacity cursor-pointer"
+          title="Brightloop Home"
         >
           <span className="text-xl font-bold tracking-tight text-white font-sans">
             Brightloop
@@ -107,7 +109,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 p-0.5 text-white/70 hover:text-white"
+              className="absolute right-2.5 p-0.5 text-white/70 hover:text-white cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -115,13 +117,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </div>
       </div>
 
-      {/* Right: Notifications & Profile / Role Dropdown */}
+      {/* Right: Home Button, Notifications & Profile / Role Dropdown */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Home Button to return to Home Page */}
+        <button
+          onClick={onNavigateLanding}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-semibold border border-white/20 transition-all shadow-xs cursor-pointer"
+          title="Return to Home Page"
+        >
+          <Home className="w-3.5 h-3.5" />
+          <span>Home</span>
+        </button>
+
         {/* Notifications Bell */}
         <div className="relative" ref={notifMenuRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors relative focus:outline-none"
+            className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors relative focus:outline-none cursor-pointer"
             title="Notifications"
           >
             <Bell className="w-4 h-4" />
@@ -139,7 +151,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 {unreadCount > 0 ? (
                   <button
                     onClick={() => setUnreadCount(0)}
-                    className="text-[10px] text-[#7A4C72] hover:underline font-semibold"
+                    className="text-[10px] text-[#7A4C72] hover:underline font-semibold cursor-pointer"
                   >
                     Mark all read
                   </button>
@@ -225,6 +237,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 })}
               </div>
 
+              {/* Home Page Link */}
+              <button
+                onClick={() => {
+                  onNavigateLanding();
+                  setShowProfileMenu(false);
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 text-left cursor-pointer"
+              >
+                <Home className="w-3.5 h-3.5 text-gray-400" />
+                <span>Return to Home Page</span>
+              </button>
+
               {/* Settings shortcut */}
               {currentRole === 'admin' && (
                 <button
@@ -238,18 +262,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                   <span>System Settings</span>
                 </button>
               )}
-
-              {/* Landing Page */}
-              <button
-                onClick={() => {
-                  onNavigateLanding();
-                  setShowProfileMenu(false);
-                }}
-                className="w-full flex items-center gap-2 px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 text-left cursor-pointer"
-              >
-                <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
-                <span>View Landing Page</span>
-              </button>
 
               {/* Logout (Flowchart target) */}
               <button

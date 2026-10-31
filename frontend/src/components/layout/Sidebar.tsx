@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Home,
   LayoutDashboard,
   Package,
   Users,
@@ -93,7 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                 isActive
                   ? 'bg-[#F6EDF3] text-[#7A4C72] font-semibold'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
@@ -123,14 +124,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Bottom Area: User role tag and Logout */}
-      <div className="p-3 border-t border-gray-100">
+      {/* Bottom Area: Home Page and Logout */}
+      <div className="p-3 border-t border-gray-100 space-y-1">
+        <button
+          onClick={() => handleNavClick('landing')}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+        >
+          <Home className="w-4 h-4 text-gray-500" />
+          <span>Home Page</span>
+        </button>
         <button
           onClick={() => {
             logout();
             onNavigate('landing');
           }}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4 text-rose-500" />
           <span>Logout</span>
@@ -158,7 +166,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="font-bold text-sm">Brightloop Menu</span>
               <button
                 onClick={onCloseMobile}
-                className="p-1 rounded-lg hover:bg-white/10 text-white"
+                className="p-1 rounded-lg hover:bg-white/10 text-white cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
