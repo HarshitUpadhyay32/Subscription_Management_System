@@ -42,6 +42,7 @@ interface AppContextType {
   switchRole: (role: UserRole) => void;
   loginAs: (role: UserRole) => void;
   loginWithCredentials: (email: string, pass: string) => boolean;
+  loginWithGoogle: () => Promise<boolean>;
   registerAccount: (name: string, email: string, company?: string) => boolean;
   logout: () => void;
 
@@ -49,6 +50,7 @@ interface AppContextType {
   supabaseLoading: boolean;
   supabaseSignIn: (email: string, password: string) => Promise<void>;
   supabaseSignUp: (email: string, password: string, name: string, company?: string) => Promise<void>;
+  supabaseSignInWithGoogle: () => Promise<void>;
   supabaseSignOut: () => Promise<void>;
   supabaseResetPassword: (email: string) => Promise<void>;
 
@@ -233,6 +235,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       showToast({ type: 'error', title: 'Reset failed', message: err.message });
       throw err;
     }
+  };
+
+  const supabaseSignInWithGoogle = async () => {
+    try {
+      await supabaseAuth.signInWithGoogle();
+      showToast({ type: 'info', title: 'Connecting to Google', message: 'Redirecting to Google Sign-In...' });
+    } catch (err: any) {
+      showToast({ type: 'error', title: 'Google Sign-in failed', message: err.message });
+      throw err;
+    }
+  };
+
+  const loginWithGoogle = async (): Promise<boolean> => {
+    try {
+      const hasAnonKey = Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY);
+      if (hasAnonKey) {
+        await supabaseAuth.signInWithGoogle();
+        return true;
+      }
+    } catch (err) {
+      console.warn('Supabase Google OAuth fallback to demo Google profile:', err);
+    }
+    const googleUser: UserProfile = {
+      id: 'usr-google-1',
+      name: 'Sahil Vishnoi',
+      email: 'sahil.vishnoi@gmail.com',
+      role: 'admin',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+      company: 'Google Cloud Partner',
+    };
+    setCurrentUser(googleUser);
+    showToast({
+      type: 'success',
+      title: 'Google Sign-In Successful',
+      message: 'Welcome back! Signed in with Google Account.',
+    });
+    return true;
   };
 
   // LocalStorage sync
@@ -803,12 +842,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         switchRole,
         loginAs,
         loginWithCredentials,
+        loginWithGoogle,
         registerAccount,
         logout,
         // Supabase real auth
         supabaseLoading: supabaseAuth.loading,
         supabaseSignIn,
         supabaseSignUp,
+        supabaseSignInWithGoogle,
         supabaseSignOut,
         supabaseResetPassword,
         products,

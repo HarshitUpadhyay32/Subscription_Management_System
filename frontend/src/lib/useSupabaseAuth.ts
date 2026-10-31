@@ -4,6 +4,7 @@
  * Handles:
  *  - signIn (email + password)
  *  - signUp (email + password + metadata)
+ *  - signInWithGoogle (OAuth)
  *  - signOut
  *  - password reset
  *  - session persistence / onAuthStateChange listener
@@ -64,6 +65,18 @@ export function useSupabaseAuth() {
     return data;
   }, []);
 
+  // ─── Sign In with Google OAuth ───────────────────────────────────────────
+  const signInWithGoogle = useCallback(async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) throw error;
+    return data;
+  }, []);
+
   // ─── Sign Out ────────────────────────────────────────────────────────────
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
@@ -93,6 +106,7 @@ export function useSupabaseAuth() {
     ...authState,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
     sendPasswordReset,
     getProfile,
