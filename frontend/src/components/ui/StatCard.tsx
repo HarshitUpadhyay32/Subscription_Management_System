@@ -11,6 +11,7 @@ interface StatCardProps {
     label?: string;
   };
   icon?: LucideIcon;
+  accent?: string;
   onClick?: () => void;
 }
 

@@ -6,14 +6,16 @@ import { useApp } from '../../context/AppContext';
 
 interface PayInvoiceModalProps {
   invoice: Invoice | null;
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 export const PayInvoiceModal: React.FC<PayInvoiceModalProps> = ({
   invoice,
-  isOpen,
+  isOpen = true,
   onClose,
+  onSuccess,
 }) => {
   const { payInvoice } = useApp();
   const [method, setMethod] = useState<'UPI' | 'Credit Card'>('UPI');

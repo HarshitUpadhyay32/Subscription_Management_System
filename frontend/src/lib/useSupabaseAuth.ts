@@ -71,6 +71,7 @@ export function useSupabaseAuth() {
       provider: 'google',
       options: {
         redirectTo: window.location.origin,
+        skipBrowserRedirect: true,
       },
     });
     if (error) throw error;
@@ -93,13 +94,21 @@ export function useSupabaseAuth() {
 
   // ─── Get Profile Row ──────────────────────────────────────────────────────
   const getProfile = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+      if (error) {
+        console.warn('Profile fetch note:', error.message);
+        return null;
+      }
+      return data;
+    } catch (e) {
+      console.warn('Profile fetch note:', e);
+      return null;
+    }
   }, []);
 
   return {

@@ -171,27 +171,61 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     if (supabaseAuth.loading) return;
     if (supabaseAuth.user) {
-      // Fetch the profile row to get the role
-      supabaseAuth.getProfile(supabaseAuth.user.id)
+      const user = supabaseAuth.user;
+      const userMeta = user.user_metadata || {};
+      const fallbackRole = (userMeta.role as UserRole) || 'customer';
+      const fallbackName = userMeta.full_name || user.email?.split('@')[0] || 'User';
+
+      supabaseAuth.getProfile(user.id)
         .then((profile) => {
           setCurrentUser({
-            id: profile.id,
-            name: profile.full_name || supabaseAuth.user!.email!.split('@')[0],
-            email: profile.email || supabaseAuth.user!.email || '',
-            role: (profile.role as UserRole) || 'customer',
+            id: user.id,
+            name: profile?.full_name || fallbackName,
+            email: profile?.email || user.email || '',
+            role: (profile?.role as UserRole) || fallbackRole,
+            company: userMeta.company,
           });
         })
         .catch(() => {
-          // Profile not yet synced (new user before trigger fires); keep demo user
+          setCurrentUser({
+            id: user.id,
+            name: fallbackName,
+            email: user.email || '',
+            role: fallbackRole,
+            company: userMeta.company,
+          });
         });
     }
-    // If no supabase session, keep existing demo user (so demo mode still works)
   }, [supabaseAuth.user, supabaseAuth.loading]);
 
   // ─── Real Supabase auth methods ───────────────────────────────────────────
   const supabaseSignIn = async (email: string, password: string) => {
     try {
-      await supabaseAuth.signIn(email, password);
+      const data = await supabaseAuth.signIn(email, password);
+      if (data?.user) {
+        const user = data.user;
+        const userMeta = user.user_metadata || {};
+        const fallbackRole = (userMeta.role as UserRole) || 'customer';
+        const fallbackName = userMeta.full_name || user.email?.split('@')[0] || 'User';
+
+        let role = fallbackRole;
+        let name = fallbackName;
+        try {
+          const profile = await supabaseAuth.getProfile(user.id);
+          if (profile?.role) role = profile.role as UserRole;
+          if (profile?.full_name) name = profile.full_name;
+        } catch {
+          // ignore
+        }
+
+        setCurrentUser({
+          id: user.id,
+          name,
+          email: user.email || email,
+          role,
+          company: userMeta.company,
+        });
+      }
       showToast({ type: 'success', title: 'Signed in', message: 'Welcome back to Brightloop!' });
     } catch (err: any) {
       showToast({ type: 'error', title: 'Sign in failed', message: err.message });
@@ -201,11 +235,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const supabaseSignUp = async (email: string, password: string, name: string, company?: string) => {
     try {
-      await supabaseAuth.signUp(email, password, { full_name: name, company });
+      const res = await supabaseAuth.signUp(email, password, { full_name: name, company });
+      if (res?.user) {
+        registerAccount(name, email, company);
+        if (res.session) {
+          setCurrentUser({
+            id: res.user.id,
+            name,
+            email,
+            role: 'customer',
+            company,
+          });
+        }
+      }
       showToast({
         type: 'success',
         title: 'Account created',
-        message: 'Welcome to Brightloop! Check your email to confirm your account.',
+        message: 'Welcome to Brightloop! Check your email to confirm your account if required.',
       });
     } catch (err: any) {
       showToast({ type: 'error', title: 'Registration failed', message: err.message });
@@ -239,7 +285,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const supabaseSignInWithGoogle = async () => {
     try {
-      await supabaseAuth.signInWithGoogle();
+      const data = await supabaseAuth.signInWithGoogle();
+      if (data?.url) {
+        window.location.href = data.url;
+      }
       showToast({ type: 'info', title: 'Connecting to Google', message: 'Redirecting to Google Sign-In...' });
     } catch (err: any) {
       showToast({ type: 'error', title: 'Google Sign-in failed', message: err.message });
@@ -249,10 +298,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const loginWithGoogle = async (): Promise<boolean> => {
     try {
-      const hasAnonKey = Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY);
+      const hasAnonKey = Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_KEY);
       if (hasAnonKey) {
-        await supabaseAuth.signInWithGoogle();
-        return true;
+        const data = await supabaseAuth.signInWithGoogle();
+        if (data?.url) {
+          // Pre-flight check to test if Google provider is enabled in Supabase
+          try {
+            const check = await fetch(data.url, { method: 'GET', redirect: 'manual' });
+            if (check.status === 400) {
+              const errJson = await check.json().catch(() => ({}));
+              console.warn('Supabase Google OAuth provider not enabled:', errJson);
+              showToast({
+                type: 'info',
+                title: 'Google OAuth Notice',
+                message: 'Google provider is not enabled in your Supabase dashboard. Logging in with demo Google profile.',
+              });
+              const googleUser: UserProfile = {
+                id: 'usr-google-1',
+                name: 'Sahil Vishnoi',
+                email: 'sahil.vishnoi@gmail.com',
+                role: 'admin',
+                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+                company: 'Google Cloud Partner',
+              };
+              setCurrentUser(googleUser);
+              return true;
+            } else {
+              window.location.href = data.url;
+              return true;
+            }
+          } catch {
+            window.location.href = data.url;
+            return true;
+          }
+        }
       }
     } catch (err) {
       console.warn('Supabase Google OAuth fallback to demo Google profile:', err);
@@ -401,6 +480,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const logout = () => {
+    if (supabaseAuth.user) {
+      supabaseAuth.signOut().catch(() => {});
+    }
     setCurrentUser(null);
     showToast({ type: 'info', message: 'You have been logged out.' });
   };

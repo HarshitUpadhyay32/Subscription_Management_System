@@ -54,6 +54,13 @@ const MainApp: React.FC = () => {
     }
   }, [currentRole, currentPath]);
 
+  // Check if returning from OAuth redirect
+  useEffect(() => {
+    if (window.location.hash.includes('access_token') || window.location.search.includes('code=')) {
+      setRootView('dashboard');
+    }
+  }, []);
+
   // Handle Landing page
   if (rootView === 'landing') {
     return (

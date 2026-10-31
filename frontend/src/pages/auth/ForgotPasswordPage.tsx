@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Mail, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
+import { isSupabaseConfigured } from '../../lib/supabaseClient';
 
 interface ForgotPasswordPageProps {
   onNavigateLogin: () => void;
@@ -10,12 +12,26 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
   onNavigateLogin,
   onNavigateLanding,
 }) => {
+  const { supabaseResetPassword } = useApp();
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setIsLoading(true);
+    setError('');
+    try {
+      if (isSupabaseConfigured) {
+        await supabaseResetPassword(email);
+      }
+      setIsSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || 'Failed to send reset email.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,6 +57,11 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
         </div>
 
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E9EBEF] shadow-[0_12px_40px_rgba(52,49,58,0.06)]">
+          {error && (
+            <div className="p-3 mb-4 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-700">
+              {error}
+            </div>
+          )}
           {isSubmitted ? (
             <div className="text-center space-y-4 py-4">
               <div className="w-12 h-12 rounded-2xl bg-[#EBF7F2] text-[#28A879] flex items-center justify-center mx-auto">
@@ -75,9 +96,11 @@ export const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({
               </div>
               <button
                 type="submit"
-                className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors"
+                disabled={isLoading}
+                className="w-full py-2.5 text-xs font-semibold rounded-xl bg-[#7A4C72] hover:bg-[#683B60] text-white shadow-[0_2px_8px_rgba(113,75,103,0.25)] transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                Send Recovery Instructions
+                {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>Send Recovery Instructions</span>
               </button>
               <button
                 type="button"

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Shield, Briefcase, User, Sparkles, Loader2, ArrowLeft } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
+import { isSupabaseConfigured } from '../../lib/supabaseClient';
 
 interface LoginPageProps {
   onNavigateLanding: () => void;
@@ -16,7 +17,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   onNavigateForgotPassword,
   onSuccessLogin,
 }) => {
-  const { loginAs, loginWithGoogle } = useApp();
+  const { loginAs, loginWithCredentials, loginWithGoogle, supabaseSignIn } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -28,17 +29,41 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     e.preventDefault();
     setError('');
     setIsLoading(true);
+
+    const normalized = email.toLowerCase().trim();
+
     try {
-      if (email.toLowerCase().includes('admin')) {
-        loginAs('admin');
-        onSuccessLogin('admin');
-      } else if (email.toLowerCase().includes('staff')) {
-        loginAs('staff');
-        onSuccessLogin('staff');
-      } else {
-        loginAs('customer');
-        onSuccessLogin('customer');
+      // 1. If Supabase is configured, attempt real authentication
+      if (isSupabaseConfigured) {
+        try {
+          await supabaseSignIn(email, password);
+          onSuccessLogin('customer');
+          return;
+        } catch (supabaseErr: any) {
+          // If user entered demo credentials, allow graceful fallback
+          const isDemoAccount =
+            normalized.includes('admin') ||
+            normalized.includes('staff') ||
+            normalized === 'elena.vance@brightloop.io' ||
+            normalized === 'arjun.nair@brightloop.io' ||
+            password === 'demo' ||
+            password === 'admin';
+
+          if (isDemoAccount) {
+            loginWithCredentials(email, password);
+            const role = normalized.includes('admin') ? 'admin' : normalized.includes('staff') ? 'staff' : 'customer';
+            onSuccessLogin(role);
+            return;
+          }
+
+          throw supabaseErr;
+        }
       }
+
+      // 2. Demo fallback if Supabase is not configured
+      loginWithCredentials(email, password);
+      const role = normalized.includes('admin') ? 'admin' : normalized.includes('staff') ? 'staff' : 'customer';
+      onSuccessLogin(role);
     } catch (err: any) {
       setError(err.message || 'Invalid email or password.');
     } finally {

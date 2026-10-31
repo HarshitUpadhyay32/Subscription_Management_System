@@ -7,16 +7,18 @@ import { useApp } from '../../context/AppContext';
 
 interface InvoiceModalProps {
   invoice: Invoice | null;
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
   onPayNow?: (invoice: Invoice) => void;
+  onPay?: () => void;
 }
 
 export const InvoiceModal: React.FC<InvoiceModalProps> = ({
   invoice,
-  isOpen,
+  isOpen = true,
   onClose,
   onPayNow,
+  onPay,
 }) => {
   const { settings, showToast } = useApp();
   if (!invoice) return null;

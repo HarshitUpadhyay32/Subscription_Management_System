@@ -94,7 +94,7 @@ export const InvoicesPaymentsPage: React.FC<InvoicesPaymentsPageProps> = ({
 
   const handleRecordPayment = (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('success', 'Payment recorded successfully');
+    showToast({ type: 'success', message: 'Payment recorded successfully' });
     setIsRecordPaymentOpen(false);
   };
 

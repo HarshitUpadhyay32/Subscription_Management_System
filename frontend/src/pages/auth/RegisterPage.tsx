@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
+import { isSupabaseConfigured } from '../../lib/supabaseClient';
 
 interface RegisterPageProps {
   onNavigateLanding: () => void;
@@ -14,7 +15,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   onNavigateLogin,
   onSuccessRegister,
 }) => {
-  const { registerAccount, loginWithGoogle } = useApp();
+  const { registerAccount, loginWithGoogle, supabaseSignUp } = useApp();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
@@ -23,13 +24,17 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     try {
-      registerAccount(name, email, company);
-      onSuccessRegister('admin');
+      if (isSupabaseConfigured) {
+        await supabaseSignUp(email, password, name, company);
+      } else {
+        registerAccount(name, email, company);
+      }
+      onSuccessRegister('customer');
     } catch (err: any) {
       setError(err.message || 'Registration failed');
     } finally {

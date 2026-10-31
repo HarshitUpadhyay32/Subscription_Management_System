@@ -1,10 +1,26 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ixcsplwnrwqbylivxkeq.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+export const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL ||
+  import.meta.env.SUPABASE_URL ||
+  'https://ixcsplwnrwqbylivxkeq.supabase.co';
 
-if (!supabaseAnonKey) {
-  console.warn('⚠️ Supabase anon key not found. Please set VITE_SUPABASE_ANON_KEY in frontend/.env');
+export const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  import.meta.env.SUPABASE_KEY ||
+  '';
+
+export const isSupabaseConfigured = Boolean(
+  supabaseAnonKey &&
+  !supabaseAnonKey.includes('your-supabase-anon-key') &&
+  !supabaseAnonKey.includes('placeholder')
+);
+
+if (!isSupabaseConfigured) {
+  console.warn('⚠️ Supabase anon key not configured. Running in demo mode.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey || 'placeholder-anon-key');
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseAnonKey || 'placeholder-anon-key'
+);
